@@ -6,33 +6,158 @@
     <title>Lab Archive | Operator</title>
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
     <style>
-        :root { --bg: #05070a; --accent: #00ff9d; --accent-blue: #00d4ff; --text-main: #e6edf3; --text-dim: #8b949e; --glass: rgba(255, 255, 255, 0.03); --glass-border: rgba(255, 255, 255, 0.1); }
-        body { background-color: var(--bg); color: var(--text-main); font-family: 'Inter', sans-serif; margin: 0; line-height: 1.6; }
-        .container { max-width: 900px; margin: 0 auto; padding: 4rem 2rem; }
-        .back-link { font-family: 'Fira Code', monospace; color: var(--accent); text-decoration: none; font-size: 0.9rem; border-bottom: 1px solid transparent; transition: 0.3s; }
-        .back-link:hover { border-color: var(--accent); }
-        h1 { font-size: 2.5rem; margin-top: 1rem; letter-spacing: -1px; color: #fff; }
-        .lab-entry { border-bottom: 1px solid var(--glass-border); padding: 2.5rem 0; transition: 0.3s; }
-        .lab-entry:hover { background: rgba(0, 255, 157, 0.02); padding-left: 15px; }
-        .tag { font-family: 'Fira Code', monospace; font-size: 0.7rem; color: var(--accent-blue); background: rgba(0, 212, 255, 0.1); padding: 4px 8px; border-radius: 4px; text-transform: uppercase; }
-        .view-btn { display: inline-block; margin-top: 1.5rem; color: var(--accent); font-family: 'Fira Code', monospace; text-decoration: none; border: 1px solid var(--accent); padding: 8px 20px; border-radius: 4px; font-size: 0.8rem; font-weight: bold; transition: 0.2s; }
-        .view-btn:hover { background: var(--accent); color: var(--bg); box-shadow: 0 0 15px var(--accent); }
-        .lab-desc { color: var(--text-dim); font-size: 0.95rem; margin-top: 10px; }
+        :root { 
+            --bg: #05070a; 
+            --accent: #00ff9d; 
+            --accent-blue: #00d4ff; 
+            --text-main: #e6edf3; 
+            --text-dim: #8b949e; 
+            --glass: rgba(255, 255, 255, 0.03); 
+            --glass-border: rgba(255, 255, 255, 0.1); 
+        }
+        
+        body { 
+            background-color: var(--bg); 
+            color: var(--text-main); 
+            font-family: 'Inter', sans-serif; 
+            margin: 0; 
+            line-height: 1.6; 
+        }
+
+        .container { 
+            max-width: 900px; 
+            margin: 0 auto; 
+            padding: 4rem 2rem; 
+        }
+
+        .breadcrumb {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            margin-bottom: 2rem;
+        }
+
+        .breadcrumb a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        h1 { 
+            font-size: 2.5rem; 
+            margin: 0.5rem 0; 
+            letter-spacing: -1px; 
+            color: #fff; 
+        }
+
+        .archive-status {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            color: var(--accent-blue);
+            margin-bottom: 3rem;
+            display: block;
+        }
+
+        .lab-entry { 
+            border-bottom: 1px solid var(--glass-border); 
+            padding: 2.5rem 0; 
+            transition: 0.3s; 
+        }
+
+        .lab-entry:hover { 
+            background: rgba(0, 255, 157, 0.02); 
+            padding-left: 15px; 
+        }
+
+        .tag-container {
+            margin-bottom: 1rem;
+        }
+
+        .tag { 
+            font-family: 'Fira Code', monospace; 
+            font-size: 0.7rem; 
+            color: var(--accent-blue); 
+            background: rgba(0, 212, 255, 0.1); 
+            padding: 4px 8px; 
+            border-radius: 4px; 
+            text-transform: uppercase;
+            margin-right: 10px;
+        }
+
+        .difficulty {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.7rem;
+            color: #ffbd2e; /* Yellow for Medium */
+        }
+
+        .lab-entry h3 {
+            margin: 0.5rem 0;
+            font-size: 1.5rem;
+            color: #fff;
+        }
+
+        .lab-desc { 
+            color: var(--text-dim); 
+            font-size: 0.95rem; 
+            margin-top: 10px; 
+            max-width: 700px;
+        }
+
+        .view-btn { 
+            display: inline-block; 
+            margin-top: 1.5rem; 
+            color: var(--accent); 
+            font-family: 'Fira Code', monospace; 
+            text-decoration: none; 
+            border: 1px solid var(--accent); 
+            padding: 8px 20px; 
+            border-radius: 4px; 
+            font-size: 0.8rem; 
+            font-weight: bold; 
+            transition: 0.2s; 
+        }
+
+        .view-btn:hover { 
+            background: var(--accent); 
+            color: var(--bg); 
+            box-shadow: 0 0 15px var(--accent); 
+        }
+
+        footer {
+            margin-top: 5rem;
+            text-align: center;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.75rem;
+            color: var(--text-dim);
+        }
     </style>
 </head>
 <body>
+
     <div class="container">
-        <a href="index.html" class="back-link">cd .. /return_to_main</a>
+        <nav class="breadcrumb">
+            <a href="index.html">root</a> / lab_reports / <span style="color: var(--text-main)">archive</span>
+        </nav>
+
         <h1>0x02_Lab_Archive</h1>
-        <p style="color: var(--text-dim); font-family: 'Fira Code';">// SYSTEM_RECORDS: ALL_COMPLETED_OPERATIONS</p>
+        <span class="archive-status">// SYSTEM_RECORDS: 1_ENTRY_FOUND</span>
 
         <div class="lab-entry">
-            <span class="tag">TryHackMe / Active Directory</span>
+            <div class="tag-container">
+                <span class="tag">TryHackMe</span>
+                <span class="tag">Active Directory</span>
+                <span class="difficulty">[ MEDIUM ]</span>
+            </div>
             <h3>SoupDecode: Full Domain Compromise</h3>
-            <p class="lab-desc">Exploiting a Windows Server 2022 DC. Chain: Null Session IPC$ -> RID Brute Force -> Password Spray -> Kerberoasting -> Sensitive Data Exposure -> Pass-the-Hash.</p>
+            <p class="lab-desc">
+                A deep dive into Active Directory misconfigurations. This report covers the exploitation chain from a Null Session IPC$ connection to full Domain Admin privileges via Kerberoasting and Pass-the-Hash.
+            </p>
             <a href="soupdecode.html" class="view-btn">READ_FULL_REPORT</a>
         </div>
 
-        </div>
+        <footer>
+            [ END OF ARCHIVE ]
+        </footer>
+    </div>
+
 </body>
 </html>
