@@ -18,10 +18,6 @@
         
         * { box-sizing: border-box; }
         
-        html {
-            scroll-behavior: smooth;
-        }
-        
         body { 
             background-color: var(--bg); 
             color: var(--text-main); 
@@ -55,6 +51,7 @@
             position: sticky; 
             top: 0; 
             z-index: 100; 
+            background: rgba(5, 7, 10, 0.8);
         }
         
         .nav-container { 
@@ -150,6 +147,11 @@
             max-width: 1100px; 
             margin: 0 auto; 
             padding: 0 2rem; 
+        }
+        
+        /* Scroll padding for fixed header offset - prevents content from being hidden under sticky nav */
+        section {
+            scroll-margin-top: 80px;
         }
         
         .section-title { 
@@ -285,11 +287,6 @@
         .t-green { color: var(--accent); } 
         .t-blue { color: var(--accent-blue); }
         
-        /* Scroll padding for fixed header offset */
-        section {
-            scroll-margin-top: 80px;
-        }
-        
         @media (max-width: 768px) { 
             .writeup-row { 
                 grid-template-columns: 1fr; 
@@ -390,7 +387,9 @@
     <footer><p>RECORDS_v1.0.8 // (C) 2026 // PENTEST_IN_PROGRESS</p></footer>
 
     <script>
-        // Enhanced smooth scrolling with offset for sticky header
+        // Smooth scrolling ONLY when clicking navigation links
+        // No automatic scroll on page load
+        
         document.querySelectorAll('.nav-links a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function(e) {
                 e.preventDefault();
@@ -410,22 +409,7 @@
             });
         });
         
-        // Handle initial hash in URL on page load
-        if (window.location.hash) {
-            setTimeout(() => {
-                const targetId = window.location.hash;
-                const targetElement = document.querySelector(targetId);
-                if (targetElement) {
-                    const headerOffset = 80;
-                    const elementPosition = targetElement.getBoundingClientRect().top;
-                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-                    window.scrollTo({
-                        top: offsetPosition,
-                        behavior: 'smooth'
-                    });
-                }
-            }, 100);
-        }
+        // No scroll on page load — page loads at top as normal
     </script>
 </body>
 </html>
