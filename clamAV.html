@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,14 +8,13 @@
     <style>
         :root { 
             --bg: #05070a; 
-            --accent: #00ff9d; 
+            --accent: #ff6b35;      /* orange is now primary accent */
             --accent-blue: #00d4ff; 
             --text-main: #e6edf3; 
             --text-dim: #8b949e; 
             --glass: rgba(255, 255, 255, 0.03); 
             --glass-border: rgba(255, 255, 255, 0.1);
-            --accent-orange: #ff6b35;
-            --glow: rgba(0,255,157,0.15);
+            --accent-green: #00ff9d;  /* green becomes secondary */
             --border-subtle: rgba(255,255,255,0.08);
         }
         
@@ -34,8 +32,8 @@
             content: '';
             position: fixed;
             inset: 0;
-            background-image: linear-gradient(rgba(0,255,157,0.02) 1px, transparent 1px),
-                              linear-gradient(90deg, rgba(0,255,157,0.02) 1px, transparent 1px);
+            background-image: linear-gradient(rgba(255,107,53,0.02) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(255,107,53,0.02) 1px, transparent 1px);
             background-size: 40px 40px;
             pointer-events: none;
             z-index: 0;
@@ -78,13 +76,13 @@
         .archive-status {
             font-family: 'Fira Code', monospace;
             font-size: 0.85rem;
-            color: var(--accent-orange);
+            color: var(--accent-green);
             margin-bottom: 2rem;
             display: flex;
             align-items: center;
             gap: 0.75rem;
             flex-wrap: wrap;
-            border-left: 2px solid var(--accent-orange);
+            border-left: 2px solid var(--accent-green);
             padding-left: 1rem;
         }
 
@@ -92,10 +90,10 @@
             display: inline-block;
             width: 8px;
             height: 8px;
-            background: var(--accent-orange);
+            background: var(--accent-green);
             border-radius: 50%;
             margin-right: 6px;
-            box-shadow: 0 0 10px var(--accent-orange);
+            box-shadow: 0 0 10px var(--accent-green);
             animation: pulse-animation 2s infinite;
         }
 
@@ -117,13 +115,13 @@
             border-bottom: 1px solid var(--glass-border);
         }
         .meta-row span { display: flex; align-items: center; gap: 0.5rem; }
-        .meta-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent-orange); display: inline-block; }
+        .meta-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent-green); display: inline-block; }
         .meta-dot.red { background: #ff5f56; }
 
         .toc {
             background: var(--glass);
             border: 1px solid var(--glass-border);
-            border-left: 3px solid var(--accent-orange);
+            border-left: 3px solid var(--accent-green);
             border-radius: 12px;
             padding: 1.5rem 1.8rem;
             margin-bottom: 3rem;
@@ -132,7 +130,7 @@
         .toc-title {
             font-family: 'Fira Code', monospace;
             font-size: 0.75rem;
-            color: var(--accent-orange);
+            color: var(--accent-green);
             letter-spacing: 0.12em;
             text-transform: uppercase;
             margin-bottom: 1rem;
@@ -151,7 +149,7 @@
             gap: 0.6rem;
         }
         .toc-num {
-            color: var(--accent-orange);
+            color: var(--accent-green);
             min-width: 2rem;
             font-weight: 500;
         }
@@ -165,15 +163,15 @@
             align-items: center;
             gap: 1rem;
             margin-bottom: 1.5rem;
-            border-left: 3px solid var(--accent-orange);
+            border-left: 3px solid var(--accent-green);
             padding-left: 1rem;
         }
         .step-num {
             font-family: 'Fira Code', monospace;
             font-size: 0.7rem;
-            color: var(--accent-orange);
-            background: rgba(255,107,53,0.08);
-            border: 1px solid rgba(255,107,53,0.25);
+            color: var(--accent-green);
+            background: rgba(0,255,157,0.08);
+            border: 1px solid rgba(0,255,157,0.25);
             padding: 3px 10px;
             border-radius: 20px;
             letter-spacing: 0.04em;
@@ -187,7 +185,7 @@
         h3 {
             font-size: 1rem;
             font-weight: 600;
-            color: var(--accent-orange);
+            color: var(--accent-green);
             margin: 1.8rem 0 0.75rem;
             font-family: 'Fira Code', monospace;
             letter-spacing: 0.02em;
@@ -202,7 +200,7 @@
         pre {
             background: #030507;
             border: 1px solid var(--glass-border);
-            border-left: 3px solid var(--accent-orange);
+            border-left: 3px solid var(--accent-green);
             padding: 1.2rem 1.5rem;
             border-radius: 12px;
             overflow-x: auto;
@@ -214,7 +212,7 @@
         }
         pre::before {
             content: '$ ';
-            color: var(--accent-orange);
+            color: var(--accent-green);
             font-weight: 500;
         }
         pre.no-prompt::before { content: ''; }
@@ -225,9 +223,9 @@
         pre.output::before { content: ''; }
 
         code {
-            color: var(--accent-orange);
+            color: var(--accent-green);
             font-family: 'Fira Code', monospace;
-            background: rgba(255,107,53,0.08);
+            background: rgba(0,255,157,0.08);
             padding: 2px 6px;
             border-radius: 6px;
             font-size: 0.88em;
@@ -241,13 +239,13 @@
             font-size: 0.78rem;
         }
         thead tr {
-            background: rgba(255,107,53,0.05);
-            border-bottom: 1px solid rgba(255,107,53,0.2);
+            background: rgba(0,255,157,0.05);
+            border-bottom: 1px solid rgba(0,255,157,0.2);
         }
         th {
             text-align: left;
             padding: 0.6rem 1rem;
-            color: var(--accent-orange);
+            color: var(--accent-green);
             font-weight: 500;
             text-transform: uppercase;
             font-size: 0.7rem;
@@ -269,20 +267,20 @@
             background: var(--glass);
             border: 1px solid var(--glass-border);
         }
-        .callout.info { border-left: 3px solid var(--accent-blue); }
-        .callout.warn { border-left: 3px solid var(--accent-orange); }
+        .callout.info { border-left: 3px solid var(--accent); }
+        .callout.warn { border-left: 3px solid var(--accent-green); }
         .callout.success { border-left: 3px solid var(--accent); }
         .callout-icon { font-size: 1.2rem; flex-shrink: 0; }
 
         .summary-box {
-            background: rgba(255,107,53,0.03);
-            border: 1px solid rgba(255,107,53,0.25);
+            background: rgba(0,255,157,0.03);
+            border: 1px solid rgba(0,255,157,0.25);
             border-radius: 16px;
             padding: 2rem;
             margin: 2.5rem 0;
         }
         .summary-box h3 {
-            color: var(--accent-orange);
+            color: var(--accent-green);
             font-size: 0.8rem;
             text-transform: uppercase;
             letter-spacing: 0.2em;
@@ -314,19 +312,19 @@
             left: 2rem;
             bottom: -12px;
             z-index: 2;
-            color: var(--accent-orange);
+            color: var(--accent-green);
             font-size: 1rem;
         }
-        .chain-num { color: var(--accent-orange); min-width: 1.8rem; }
+        .chain-num { color: var(--accent-green); min-width: 1.8rem; }
         .chain-label { color: white; font-weight: 500; }
         .chain-desc { color: var(--text-dim); margin-left: auto; font-size: 0.7rem; }
 
         .flag-reveal {
             font-family: 'Fira Code', monospace;
             font-size: 0.85rem;
-            color: var(--accent-orange);
-            background: rgba(255,107,53,0.07);
-            border: 1px solid rgba(255,107,53,0.3);
+            color: var(--accent-green);
+            background: rgba(0,255,157,0.07);
+            border: 1px solid rgba(0,255,157,0.3);
             padding: 0.7rem 1.2rem;
             border-radius: 12px;
             margin: 1rem 0;
@@ -335,7 +333,7 @@
 
         ul { padding-left: 1.5rem; margin-bottom: 1rem; }
         ul li { margin-bottom: 0.4rem; font-size: 0.93rem; }
-        ul li::marker { color: var(--accent-orange); }
+        ul li::marker { color: var(--accent-green); }
 
         .cheat-grid {
             display: grid;
@@ -369,7 +367,7 @@
             font-size: 0.72rem;
             color: var(--text-dim);
         }
-        .footer-flag { color: var(--accent-orange); font-weight: 500; }
+        .footer-flag { color: var(--accent-green); font-weight: 500; }
         hr { border: none; border-top: 1px solid var(--glass-border); margin: 2rem 0; }
 
         @media (max-width: 680px) {
@@ -434,7 +432,7 @@
             </table>
         </div>
         <div class="callout info">
-            <span class="callout-icon">💡</span>
+            <span class="callout-icon">[i]</span>
             <div><strong>Machine naming clue:</strong> Box is called "ClamAV" — the anti-virus software. Sendmail on port 25 strongly suggests clamav-milter integration, a known CVE vector.</div>
         </div>
     </div>
@@ -459,7 +457,7 @@ Subject: test
 .
 250 2.0.0 Message accepted → milter is active!</pre>
         <div class="callout warn">
-            <span class="callout-icon">⚠️</span>
+            <span class="callout-icon">[!]</span>
             <div><strong>Milter detection confirmed:</strong> The "250 Message accepted" response after DATA indicates ClamAV-milter is processing emails — vulnerable versions &lt;0.91.2 suffer from command injection in the RCPT TO field.</div>
         </div>
     </div>
@@ -473,7 +471,7 @@ Subject: test
         <pre>searchsploit clamav
 searchsploit -m multiple/remote/4761.pl</pre>
         <div class="callout success">
-            <span class="callout-icon">📂</span>
+            <span class="callout-icon">[+]</span>
             <div><strong>Exploit ID:</strong> 4761.pl — "Sendmail with clamav-milter &lt; 0.91.2 - Remote Command Execution". The exploit works by injecting shell metacharacters into the RCPT TO field, which gets passed unsanitized to a system() call inside the milter running as root.</div>
         </div>
         <p><strong>Vulnerability mechanism:</strong> ClamAV milter's blackhole mode had a bug where recipient addresses weren't properly sanitized before being passed to a shell. Embedding backticks or $() in the RCPT TO executes arbitrary commands as root.</p>
@@ -493,9 +491,9 @@ searchsploit -m multiple/remote/4761.pl</pre>
 whoami
 root
 cat /root/proof.txt</pre>
-        <div class="flag-reveal">🚩 proof.txt → 301b599efa8de3a8aa0703e20c0fc2a0</div>
+        <div class="flag-reveal">proof.txt → 301b599efa8de3a8aa0703e20c0fc2a0</div>
         <div class="callout success">
-            <span class="callout-icon">🎯</span>
+            <span class="callout-icon">[+]</span>
             <div><strong>Root obtained instantly:</strong> The exploit writes a shell service to /etc/inetd.conf and restarts inetd, binding a root shell to port 31337. No privilege escalation needed — milter runs as root.</div>
         </div>
     </div>
@@ -515,7 +513,7 @@ cat /root/proof.txt</pre>
         </ul>
         <p>The exploit doesn't attack Sendmail directly. It uses Sendmail as a transport to reach the vulnerable ClamAV milter, where the RCPT TO field gets passed unsanitized to a shell. Embedding shell metacharacters executes OS commands as root.</p>
         <div class="callout info">
-            <span class="callout-icon">🧠</span>
+            <span class="callout-icon">[i]</span>
             <div><strong>OSCP mindset:</strong> Box names often give away the vulnerability. ClamAV + Sendmail = CVE-2007-4560. Always check searchsploit before manual enumeration.</div>
         </div>
     </div>
@@ -536,7 +534,7 @@ cat /root/proof.txt</pre>
         <p>Samba 3.0.14a on this box is vulnerable to <code>usermap_script</code> (CVE-2007-2447). Two independent roads to root existed.</p>
         <pre>searchsploit samba 3.0.14</pre>
         <div class="callout warn">
-            <span class="callout-icon">⚡</span>
+            <span class="callout-icon">[!]</span>
             <div><strong>Parallel recon:</strong> Run enum4linux and gobuster while SMTP enumeration is happening. Don't serialize — exploit every open service concurrently.</div>
         </div>
         <p><strong>Workflow insight:</strong> nmap → searchsploit every version → prioritize unauthenticated services → read exploit → run exploit → root. Don't get stuck manually poking services when searchsploit can skip you ahead.</p>
@@ -550,19 +548,19 @@ cat /root/proof.txt</pre>
             <h2>Troubleshooting Common Issues</h2>
         </div>
         <div class="callout warn">
-            <span class="callout-icon">🔧</span>
+            <span class="callout-icon">[!]</span>
             <div><strong>No shell on port 31337 after exploit:</strong> inetd may not be installed, or the write to inetd.conf failed. Connect immediately after exploit fires — there's a brief window. Re-run exploit; first attempt may have failed silently. Use <code>nc -v</code> to distinguish "connection refused" from "timed out".</div>
         </div>
         <div class="callout warn">
-            <span class="callout-icon">⏳</span>
+            <span class="callout-icon">[!]</span>
             <div><strong>SMTP connection gets no response:</strong> Wait 5 seconds — SMTP banners are slow. Try telnet instead of nc. Send EHLO or HELO to prompt the server.</div>
         </div>
         <div class="callout warn">
-            <span class="callout-icon">📚</span>
+            <span class="callout-icon">[!]</span>
             <div><strong>Searchsploit finds nothing:</strong> Try broader terms: 'clamav', 'milter', 'sendmail' separately. Update DB: <code>searchsploit -u</code>. Fall back to exploit-db.com search by version or CVE manually.</div>
         </div>
         <div class="callout warn">
-            <span class="callout-icon">✉️</span>
+            <span class="callout-icon">[!]</span>
             <div><strong>Exploit runs but SMTP rejects injection:</strong> Check that 'Recipient ok' appears for the RCPT TO injection lines — that's confirmation it worked. Try the Metasploit version (16924.rb) as a fallback.</div>
         </div>
     </div>
