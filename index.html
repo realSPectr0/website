@@ -115,7 +115,7 @@
         }
 
         .container { max-width: 1100px; margin: 0 auto; padding: 0 2rem; }
-        .section-title { font-family: 'Fira Code', monospace; color: var(--accent); margin: 4rem 0 2rem; }
+        .section-title { font-family: 'Fira Code', monospace; color: var(--accent); margin: 4rem 0 2rem; text-transform: uppercase; letter-spacing: 2px; font-size: 1rem; }
 
         .card-grid {
             display: grid;
@@ -128,14 +128,23 @@
             backdrop-filter: blur(5px);
             border: 1px solid var(--glass-border);
             padding: 2rem;
-            border-radius: 15px;
+            border-radius: 12px;
             transition: 0.3s ease;
+            position: relative;
         }
 
         .glass-card:hover {
             transform: translateY(-5px);
             border-color: var(--accent);
             background: rgba(255, 255, 255, 0.05);
+        }
+
+        .card-category {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.7rem;
+            color: var(--accent);
+            margin-bottom: 1rem;
+            display: block;
         }
 
         .progress-bar {
@@ -157,6 +166,8 @@
             color: var(--accent);
             text-decoration: none;
             font-weight: bold;
+            font-size: 0.9rem;
+            font-family: 'Fira Code', monospace;
         }
 
         footer { text-align: center; padding: 4rem; color: var(--text-dim); font-size: 0.8rem; border-top: 1px solid var(--glass-border); margin-top: 4rem;}
@@ -182,9 +193,9 @@
 
     <header>
         <div class="hero-content">
-            <div class="status-pill">● SYSTEM ACTIVE</div>
+            <div class="status-pill">SYSTEM ONLINE</div>
             <h1>Securing the <span class="highlight">Future.</span></h1>
-            <p>17-year-old Security Researcher based in the Bay Area. CompTIA Security+ certified. OSCP Candidate.</p>
+            <p>17-year-old Security Researcher. Bay Area. CompTIA Security+ certified. OSCP Candidate.</p>
             
             <div class="terminal-window">
                 <div class="terminal-header">
@@ -207,18 +218,17 @@
         <section id="certs">
             <h2 class="section-title">Verified_Credentials</h2>
             <div class="card-grid">
-                <div class="glass-card cert-card">
-                    <div class="card-icon">🛡️</div>
+                <div class="glass-card">
+                    <span class="card-category">[ CERTIFIED ]</span>
                     <h3>CompTIA Security+</h3>
                     <p>Industrial baseline for security ops, risk management, and forensics.</p>
-                    <div class="card-footer">Verified 2026</div>
+                    <div class="card-footer" style="font-size: 0.8rem; color: var(--text-dim);">ID: COMP00123456</div>
                 </div>
-                <div class="glass-card cert-card oscp">
-                    <div class="card-icon">⚡</div>
-                    <h3>OSCP</h3>
-                    <p>Currently mastering AD exploitation and manual pivoting techniques.</p>
+                <div class="glass-card">
+                    <span class="card-category">[ IN_PROGRESS ]</span>
+                    <h3>OffSec OSCP</h3>
+                    <p>Advanced AD exploitation, manual pivoting, and report writing.</p>
                     <div class="progress-container">
-                        <div class="progress-label">Prep Progress <span>75%</span></div>
                         <div class="progress-bar"><div class="progress-fill"></div></div>
                     </div>
                 </div>
@@ -228,24 +238,24 @@
         <section id="labs">
             <h2 class="section-title">Mission_Logs</h2>
             <div class="card-grid">
-                <div class="glass-card lab-card">
-                    <span class="label">PENTEST</span>
+                <div class="glass-card">
+                    <span class="card-category">[ PENTEST ]</span>
                     <h3>HTB: "Forest"</h3>
-                    <p>Full Active Directory compromise using Bloodhound and AS-REP Roasting.</p>
-                    <a href="#" class="action-link">Read Writeup →</a>
+                    <p>Active Directory compromise via Bloodhound and AS-REP Roasting.</p>
+                    <a href="#" class="action-link">VIEW_REPORT.EXE</a>
                 </div>
-                <div class="glass-card lab-card">
-                    <span class="label">DEFENSE</span>
+                <div class="glass-card">
+                    <span class="card-category">[ DEFENSE ]</span>
                     <h3>Home Lab Network</h3>
-                    <p>Configured pfSense firewall and Snort IDS to monitor VM traffic.</p>
-                    <a href="#" class="action-link">View Topology →</a>
+                    <p>pfSense firewall and Snort IDS deployment on virtualized infrastructure.</p>
+                    <a href="#" class="action-link">VIEW_TOPOLOGY.PNG</a>
                 </div>
             </div>
         </section>
     </main>
 
     <footer>
-        <p>&copy; 2026 // Built for the Bay Area Cyber Community</p>
+        <p>TERMINAL VERSION 1.0.2 // (C) 2026</p>
     </footer>
 
 </body>
