@@ -57,6 +57,24 @@
             display: block;
         }
 
+        /* Pulse animation for the status indicator */
+        .pulse {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: var(--accent-blue);
+            border-radius: 50%;
+            margin-right: 8px;
+            box-shadow: 0 0 10px var(--accent-blue);
+            animation: pulse-animation 2s infinite;
+        }
+
+        @keyframes pulse-animation {
+            0% { opacity: 1; }
+            50% { opacity: 0.3; }
+            100% { opacity: 1; }
+        }
+
         .lab-entry { 
             border-bottom: 1px solid var(--glass-border); 
             padding: 2.5rem 0; 
@@ -86,8 +104,11 @@
         .difficulty {
             font-family: 'Fira Code', monospace;
             font-size: 0.7rem;
-            color: #ffbd2e; /* Yellow for Medium */
         }
+
+        .diff-easy { color: var(--accent); }
+        .diff-medium { color: #ffbd2e; }
+        .diff-hard { color: #ff5f56; }
 
         .lab-entry h3 {
             margin: 0.5rem 0;
@@ -139,19 +160,34 @@
         </nav>
 
         <h1>0x02_Lab_Archive</h1>
-        <span class="archive-status">// SYSTEM_RECORDS: 1_ENTRY_FOUND</span>
+        <span class="archive-status">
+            <span class="pulse"></span>// SYSTEM_RECORDS: 2_ENTRIES_FOUND
+        </span>
 
         <div class="lab-entry">
             <div class="tag-container">
                 <span class="tag">TryHackMe</span>
                 <span class="tag">Active Directory</span>
-                <span class="difficulty">[ MEDIUM ]</span>
+                <span class="difficulty diff-medium">[ MEDIUM ]</span>
             </div>
             <h3>SoupDecode: Full Domain Compromise</h3>
             <p class="lab-desc">
                 A deep dive into Active Directory misconfigurations. This report covers the exploitation chain from a Null Session IPC$ connection to full Domain Admin privileges via Kerberoasting and Pass-the-Hash.
             </p>
             <a href="https://realspectr0.github.io/website/soupedecode.html" class="view-btn">READ_FULL_REPORT</a>
+        </div>
+
+        <div class="lab-entry">
+            <div class="tag-container">
+                <span class="tag">HackTheBox</span>
+                <span class="tag">Linux</span>
+                <span class="difficulty diff-easy">[ EASY ]</span>
+            </div>
+            <h3>NIX_ROOT: Kernel Exploitation</h3>
+            <p class="lab-desc">
+                Investigating horizontal and vertical escalation on a Linux-based target. Focused on identifying weak file permissions and exploiting an outdated kernel version for root access.
+            </p>
+            <a href="#" class="view-btn">READ_FULL_REPORT</a>
         </div>
 
         <footer>
