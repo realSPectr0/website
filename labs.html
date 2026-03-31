@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab Archive | Operator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* Reuse the same CSS from your index.html to keep the look consistent */
+        :root { --bg: #05070a; --accent: #00ff9d; --accent-blue: #00d4ff; --text-main: #e6edf3; --text-dim: #8b949e; --glass: rgba(255, 255, 255, 0.03); --glass-border: rgba(255, 255, 255, 0.1); }
+        body { background-color: var(--bg); color: var(--text-main); font-family: 'Inter', sans-serif; margin: 0; }
+        .container { max-width: 900px; margin: 0 auto; padding: 4rem 2rem; }
+        .back-link { font-family: 'Fira Code', monospace; color: var(--accent); text-decoration: none; font-size: 0.9rem; }
+        h1 { font-size: 2.5rem; margin-top: 1rem; letter-spacing: -1px; }
+        .lab-entry { border-bottom: 1px solid var(--glass-border); padding: 2rem 0; }
+        .tag { font-family: 'Fira Code', monospace; font-size: 0.7rem; color: var(--accent-blue); background: rgba(0, 212, 255, 0.1); padding: 4px 8px; border-radius: 4px; }
+        .view-btn { display: inline-block; margin-top: 1rem; color: var(--accent); font-family: 'Fira Code', monospace; text-decoration: none; border: 1px solid var(--accent); padding: 8px 16px; border-radius: 4px; font-size: 0.8rem; }
+        .view-btn:hover { background: var(--accent); color: var(--bg); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-link">cd .. /return_to_main</a>
+        <h1>0x02_Lab_Archive</h1>
+        <p style="color: var(--text-dim);">Detailed technical documentation for penetration testing labs and security research.</p>
+
+        <div class="lab-entry">
+            <span class="tag">HTB / LINUX</span>
+            <h3>Machine: Forest</h3>
+            <p>Active Directory exploitation focusing on AS-REP Roasting and Bloodhound analysis. Captured User and Root flags.</p>
+            <a href="YOUR_LINK_HERE" class="view-btn">READ_FULL_REPORT</a>
+        </div>
+
+        <div class="lab-entry">
+            <span class="tag">DEFENSE</span>
+            <h3>pfSense IDS Implementation</h3>
+            <p>Deploying Snort on pfSense to monitor home lab traffic and block malicious subnets.</p>
+            <a href="YOUR_LINK_HERE" class="view-btn">READ_FULL_REPORT</a>
+        </div>
+    </div>
+</body>
+</html>
