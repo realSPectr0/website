@@ -1,46 +1,94 @@
-<link rel="stylesheet" href="style.css">
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cyber Security Portfolio | Your Name</title>
+    <title>Operator | Cybersecurity Portfolio</title>
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
 
+    <div class="scanline"></div>
+
     <nav>
-        <div class="container">
-            <span class="logo">ROOT@YOURNAME:~$</span>
-            <ul>
-                <li><a href="#about">About</a></li>
-                <li><a href="#certs">Certs</a></li>
-                <li><a href="#labs">Labs</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
+        <div class="nav-container">
+            <div class="terminal-prefix">admin@portfolio:<span class="path">~</span><span class="cursor">_</span></div>
+            <div class="nav-links">
+                <a href="#certs">/certifications</a>
+                <a href="#labs">/lab_reports</a>
+                <a href="#contact">/contact</a>
+            </div>
         </div>
     </nav>
 
-    <header id="about">
-        <div class="container">
-            <h1>Security Researcher & Pentester</h1>
-            <p class="subtitle">Focused on Offensive Security and Network Defense</p>
-            <div class="badge-row">
-                <span class="badge">CompTIA Security+</span>
-                <span class="badge-alt">OSCP (In Progress)</span>
+    <header>
+        <div class="hero-content">
+            <div class="status-pill">● SYSTEM ACTIVE</div>
+            <h1>Securing the <span class="highlight">Future.</span></h1>
+            <p>17-year-old Security Researcher based in the Bay Area. CompTIA Security+ certified. OSCP Candidate.</p>
+            
+            <div class="terminal-window">
+                <div class="terminal-header">
+                    <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+                    <span class="terminal-title">bash — 80x24</span>
+                </div>
+                <div class="terminal-body">
+                    <p><span class="t-green">➜</span> <span class="t-blue">~</span> nmap -sV -T4 127.0.0.1</p>
+                    <p>Starting Nmap 7.92... </p>
+                    <p>PORT   STATE SERVICE VERSION</p>
+                    <p>22/tcp open  ssh     OpenSSH 8.2p1</p>
+                    <p>80/tcp open  http    Apache/2.4.41</p>
+                    <p><span class="t-green">➜</span> <span class="t-blue">~</span> <span class="blink">█</span></p>
+                </div>
             </div>
         </div>
     </header>
 
-    <section id="certs" class="container">
-        <h2>_Certifications</h2>
-        <div class="grid">
-            <div class="card cert">
-                <h3>CompTIA Security+</h3>
-                <p>Verified foundational knowledge in threat management, cryptography, and network security.</p>
-                <a href="#" class="btn-small">View Credential</a>
+    <main class="container">
+        <section id="certs">
+            <h2 class="section-title">Verified_Credentials</h2>
+            <div class="card-grid">
+                <div class="glass-card cert-card">
+                    <div class="card-icon">🛡️</div>
+                    <h3>CompTIA Security+</h3>
+                    <p>Industrial baseline for security ops, risk management, and forensics.</p>
+                    <div class="card-footer">Verified 2026</div>
+                </div>
+                <div class="glass-card cert-card oscp">
+                    <div class="card-icon">⚡</div>
+                    <h3>OSCP</h3>
+                    <p>Currently mastering AD exploitation and manual pivoting techniques.</p>
+                    <div class="progress-container">
+                        <div class="progress-label">Prep Progress <span>75%</span></div>
+                        <div class="progress-bar"><div class="progress-fill"></div></div>
+                    </div>
+                </div>
             </div>
-            <div class="card cert progress">
-                <h3>OffSec OSCP</h3>
-                <p>Currently training in advanced penetration testing methodologies
+        </section>
+
+        <section id="labs">
+            <h2 class="section-title">Mission_Logs</h2>
+            <div class="card-grid">
+                <div class="glass-card lab-card">
+                    <span class="label">PENTEST</span>
+                    <h3>HTB: "Forest"</h3>
+                    <p>Full Active Directory compromise using Bloodhound and AS-REP Roasting.</p>
+                    <a href="#" class="action-link">Read Writeup →</a>
+                </div>
+                <div class="glass-card lab-card">
+                    <span class="label">DEFENSE</span>
+                    <h3>Home Lab Network</h3>
+                    <p>Configured pfSense firewall and Snort IDS to monitor VM traffic.</p>
+                    <a href="#" class="action-link">View Topology →</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 // Built for the Bay Area Cyber Community</p>
+    </footer>
+
+</body>
+</html>
