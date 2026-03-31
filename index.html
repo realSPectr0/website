@@ -287,6 +287,80 @@
         .t-green { color: var(--accent); } 
         .t-blue { color: var(--accent-blue); }
         
+        /* Rice section specific styling */
+        .rice-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .rice-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: 0.3s ease;
+        }
+        
+        .rice-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-blue);
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.1);
+        }
+        
+        .rice-preview {
+            height: 160px;
+            background: linear-gradient(135deg, #0a0e1a 0%, #1a1f2e 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .rice-preview::before {
+            content: "█▓▒░";
+            font-family: 'Fira Code', monospace;
+            font-size: 2rem;
+            color: var(--accent-blue);
+            opacity: 0.3;
+            letter-spacing: 8px;
+        }
+        
+        .rice-content {
+            padding: 1.2rem;
+        }
+        
+        .rice-content h3 {
+            margin: 0 0 0.3rem 0;
+            font-size: 1rem;
+            color: var(--accent-blue);
+            font-family: 'Fira Code', monospace;
+        }
+        
+        .rice-content p {
+            margin: 0;
+            font-size: 0.8rem;
+            color: var(--text-dim);
+        }
+        
+        .rice-tags {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.8rem;
+            flex-wrap: wrap;
+        }
+        
+        .rice-tag {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.6rem;
+            padding: 2px 8px;
+            background: rgba(0, 212, 255, 0.1);
+            border-radius: 4px;
+            color: var(--accent-blue);
+        }
+        
         @media (max-width: 768px) { 
             .writeup-row { 
                 grid-template-columns: 1fr; 
@@ -309,6 +383,7 @@
             <div class="nav-links">
                 <a href="#certs">/certifications</a>
                 <a href="labs.html">/lab_archive</a>
+                <a href="#rice">/rice</a>
                 <a href="#contact">/contact</a>
             </div>
         </div>
@@ -318,16 +393,17 @@
         <div class="hero-content">
             <div class="status-pill">SYSTEM_ONLINE</div>
             <h1><span class="highlight">temp3st</span></h1>
-            <p>17-year-old CyberSec Enthusiast | Bay Area | Security+ | OSCP Candidate</p>
+            <p>17-year-old CyberSec Enthusiast | Bay Area | Security+ | OSCP Candidate | Arch Linux · Hyprland</p>
             <div class="terminal-window">
                 <div class="terminal-header"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span><span class="terminal-title">bash — 80x24</span></div>
                 <div class="terminal-body">
-                    <p><span class="t-green">➜</span> <span class="t-blue">~</span> nmap -sV -T4 127.0.0.1</p>
-                    <p>Starting Nmap 7.92... </p>
-                    <p>PORT   STATE SERVICE VERSION</p>
-                    <p>22/tcp open  ssh     OpenSSH 8.2p1</p>
-                    <p>80/tcp open  http    Apache/2.4.41</p>
-                    <p>ERROR  ricing arch HYPRLAND </p>
+                    <p><span class="t-green">➜</span> <span class="t-blue">~</span> neofetch</p>
+                    <p>            .-/+oossssoo+/-.               temp3st@arch</p>
+                    <p>        `:+ssssssssssssssssss+:`           OS: Arch Linux x86_64</p>
+                    <p>      -+ssssssssssssssssssyyssss+-         WM: Hyprland</p>
+                    <p>    .ossssssssssssssssssdMMMNysssso.       Shell: zsh 5.9</p>
+                    <p>   /ssssssssssshdmmNNmmyNMMMMhssssss/      Terminal: kitty</p>
+                    <p>  +ssssssssshmydMMMMMMMNddddyssssssss+     Theme: Tokyo Night</p>
                     <p><span class="t-green">➜</span> <span class="t-blue">~</span> █</p>
                 </div>
             </div>
@@ -372,19 +448,82 @@
                     <div class="w-action"><a href="labs.html" class="action-link">VIEW_LOG</a></div>
                 </div>
             </div>
-            <div style="text-align: center; margin-top: 3rem;">
-                <a href="labs.html" class="action-link" style="padding: 15px 30px; font-size: 1rem;">ACCESS_COMPLETE_LAB_ARCHIVE</a>
+            <div style="text-align: center; margin-top: 2rem;">
+                <a href="labs.html" class="action-link" style="padding: 12px 24px;">ACCESS_COMPLETE_LAB_ARCHIVE</a>
+            </div>
+        </section>
+
+        <section id="rice">
+            <h2 class="section-title">0x03_Hyprland_Rice_Collection</h2>
+            <p style="color: var(--text-dim); margin-bottom: 1rem;">// Arch Linux · Wayland · Aesthetic customization · Dotfiles</p>
+            <div class="rice-grid">
+                <div class="rice-card">
+                    <div class="rice-preview"></div>
+                    <div class="rice-content">
+                        <h3>tokyo-night</h3>
+                        <p>Dark blue theme with neon accents, custom waybar, and rounded corners. Kitty terminal with transparency.</p>
+                        <div class="rice-tags">
+                            <span class="rice-tag">hyprland</span>
+                            <span class="rice-tag">waybar</span>
+                            <span class="rice-tag">kitty</span>
+                            <span class="rice-tag">rofi</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="rice-card">
+                    <div class="rice-preview"></div>
+                    <div class="rice-content">
+                        <h3>catppuccin-mocha</h3>
+                        <p>Pastel purple/pink aesthetic with blur effects, rounded windows, and animated workspaces.</p>
+                        <div class="rice-tags">
+                            <span class="rice-tag">hyprland</span>
+                            <span class="rice-tag">eww</span>
+                            <span class="rice-tag">alacritty</span>
+                            <span class="rice-tag">swaync</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="rice-card">
+                    <div class="rice-preview"></div>
+                    <div class="rice-content">
+                        <h3>nord-zen</h3>
+                        <p>Minimal Arctic color scheme, focused on productivity with tiling and smooth animations.</p>
+                        <div class="rice-tags">
+                            <span class="rice-tag">hyprland</span>
+                            <span class="rice-tag">ags</span>
+                            <span class="rice-tag">foot</span>
+                            <span class="rice-tag">nvim</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="rice-card">
+                    <div class="rice-preview"></div>
+                    <div class="rice-content">
+                        <h3>dracula-blur</h3>
+                        <p>Dark purple theme with heavy blur effects, custom eww widgets, and pywal integration.</p>
+                        <div class="rice-tags">
+                            <span class="rice-tag">hyprland</span>
+                            <span class="rice-tag">eww</span>
+                            <span class="rice-tag">pywal</span>
+                            <span class="rice-tag">wlogout</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 2rem;">
+                <a href="#" class="action-link" style="padding: 10px 20px;">VIEW_DOTFILES_ON_GITHUB</a>
+                <a href="#" class="action-link" style="padding: 10px 20px; margin-left: 1rem; border-color: var(--accent-blue); color: var(--accent-blue);">RICE_GALLERY</a>
             </div>
         </section>
 
         <section id="contact" class="contact-box">
-            <h2 class="section-title" style="margin-top: 0;">0x03_Establish_Connection</h2>
-            <p>Interested in collaboration or professional inquiries?</p>
+            <h2 class="section-title" style="margin-top: 0;">0x04_Establish_Connection</h2>
+            <p>Interested in collaboration, security research, or ricing discussions?</p>
             <a href="mailto:your-email@example.com" class="action-link" style="margin-top: 1rem;">SEND_SECURE_MESSAGE</a>
         </section>
     </main>
 
-    <footer><p>RECORDS_v1.0.8 // (C) 2026 // PENTEST_IN_PROGRESS</p></footer>
+    <footer><p>RECORDS_v1.0.8 // (C) 2026 // PENTEST_IN_PROGRESS // RICE_LEVEL: OVER_9000</p></footer>
 
     <script>
         // Smooth scrolling ONLY when clicking navigation links
