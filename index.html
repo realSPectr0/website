@@ -23,8 +23,10 @@
             font-family: 'Inter', sans-serif;
             margin: 0;
             overflow-x: hidden;
+            line-height: 1.6;
         }
 
+        /* Scanline Overlay */
         .scanline {
             width: 100%; height: 100px;
             z-index: 9999;
@@ -41,6 +43,7 @@
             100% { bottom: -100px; }
         }
 
+        /* Navigation */
         nav {
             backdrop-filter: blur(10px);
             border-bottom: 1px solid var(--glass-border);
@@ -69,6 +72,7 @@
 
         .nav-links a:hover { color: var(--accent); text-shadow: 0 0 10px var(--accent); }
 
+        /* Hero Header */
         header { padding: 6rem 2rem 4rem; text-align: center; }
 
         .status-pill {
@@ -81,11 +85,13 @@
             letter-spacing: 2px;
             margin-bottom: 1rem;
             border: 1px solid var(--accent);
+            font-weight: bold;
         }
 
         h1 { font-size: 3.5rem; font-weight: 800; margin: 0; letter-spacing: -2px; }
         .highlight { color: var(--accent-blue); text-shadow: 0 0 20px rgba(0, 212, 255, 0.3); }
 
+        /* Terminal Display */
         .terminal-window {
             max-width: 650px;
             margin: 3rem auto;
@@ -114,9 +120,18 @@
             color: #fff;
         }
 
+        /* Layout Containers */
         .container { max-width: 1100px; margin: 0 auto; padding: 0 2rem; }
-        .section-title { font-family: 'Fira Code', monospace; color: var(--accent); margin: 4rem 0 2rem; text-transform: uppercase; letter-spacing: 2px; font-size: 1rem; }
+        .section-title { 
+            font-family: 'Fira Code', monospace; 
+            color: var(--accent); 
+            margin: 4rem 0 2rem; 
+            text-transform: uppercase; 
+            letter-spacing: 2px; 
+            font-size: 1rem; 
+        }
 
+        /* Grid for Certs */
         .card-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -137,16 +152,16 @@
             width: 100%; height: 6px;
             background: #161b22;
             border-radius: 10px;
-            margin-top: 10px;
+            margin-top: 15px;
         }
 
         .progress-fill {
-            width: 75%; height: 100%;
             background: linear-gradient(90deg, var(--accent), var(--accent-blue));
             border-radius: 10px;
+            height: 100%;
         }
 
-        /* Writeup List Styles */
+        /* Writeup List */
         .writeup-list {
             margin-top: 1rem;
             border-top: 1px solid var(--glass-border);
@@ -162,7 +177,7 @@
         }
 
         .writeup-row:hover {
-            background: rgba(0, 255, 157, 0.02);
+            background: rgba(0, 255, 157, 0.03);
             padding-left: 10px;
         }
 
@@ -170,34 +185,48 @@
         .w-date { display: block; color: var(--text-dim); }
         .w-tag { color: var(--accent); font-weight: bold; }
 
-        .w-info h3 { margin: 0 0 0.2rem 0; font-size: 1.1rem; }
+        .w-info h3 { margin: 0 0 0.2rem 0; font-size: 1.1rem; color: #fff; }
         .w-info p { margin: 0; font-size: 0.9rem; color: var(--text-dim); }
 
+        /* Custom Action Link Buttons */
         .action-link {
+            display: inline-block;
             color: var(--accent);
             text-decoration: none;
             font-weight: bold;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             font-family: 'Fira Code', monospace;
             border: 1px solid var(--accent);
-            padding: 5px 10px;
+            padding: 8px 16px;
             border-radius: 4px;
+            text-align: center;
             transition: 0.2s;
         }
 
         .action-link:hover {
             background: var(--accent);
             color: var(--bg);
+            box-shadow: 0 0 15px var(--accent);
         }
 
-        footer { text-align: center; padding: 4rem; color: var(--text-dim); font-size: 0.8rem; border-top: 1px solid var(--glass-border); margin-top: 4rem;}
+        footer { 
+            text-align: center; 
+            padding: 4rem; 
+            color: var(--text-dim); 
+            font-size: 0.8rem; 
+            border-top: 1px solid var(--glass-border); 
+            margin-top: 4rem;
+            font-family: 'Fira Code', monospace;
+        }
         
         .t-green { color: var(--accent); }
         .t-blue { color: var(--accent-blue); }
 
+        /* Responsive */
         @media (max-width: 768px) {
             .writeup-row { grid-template-columns: 1fr; gap: 1rem; }
             h1 { font-size: 2.5rem; }
+            .nav-links { display: none; }
         }
     </style>
 </head>
@@ -210,7 +239,7 @@
             <div class="terminal-prefix">admin@portfolio:<span class="path">~</span><span class="cursor">_</span></div>
             <div class="nav-links">
                 <a href="#certs">/certifications</a>
-                <a href="#labs">/lab_reports</a>
+                <a href="labs.html">/lab_archive</a>
                 <a href="#contact">/contact</a>
             </div>
         </div>
@@ -218,9 +247,9 @@
 
     <header>
         <div class="hero-content">
-            <div class="status-pill">SYSTEM ONLINE</div>
+            <div class="status-pill">SYSTEM_ONLINE</div>
             <h1>Securing the <span class="highlight">Future.</span></h1>
-            <p>17-year-old Security Researcher. Bay Area. CompTIA Security+ certified. OSCP Candidate.</p>
+            <p>17-year-old Security Researcher | Bay Area | Security+ | OSCP Candidate</p>
             
             <div class="terminal-window">
                 <div class="terminal-header">
@@ -246,19 +275,19 @@
                 <div class="glass-card">
                     <span style="font-family: 'Fira Code'; font-size: 0.7rem; color: var(--accent);">[ CERTIFIED ]</span>
                     <h3>CompTIA Security+</h3>
-                    <p>Risk management, cryptography, and network security operations.</p>
+                    <p>Validated expertise in threat management, cryptography, and secure network architecture.</p>
                 </div>
                 <div class="glass-card">
-                    <span style="font-family: 'Fira Code'; font-size: 0.7rem; color: var(--accent-blue);">[ CANDIDATE ]</span>
+                    <span style="font-family: 'Fira Code'; font-size: 0.7rem; color: var(--accent-blue);">[ IN_PROGRESS ]</span>
                     <h3>OffSec OSCP</h3>
-                    <p>Active preparation for PEN-200. Mastering AD and manual exploitation.</p>
-                    <div class="progress-bar"><div class="progress-fill"></div></div>
+                    <p>Developing advanced methodologies for AD exploitation and manual penetration testing.</p>
+                    <div class="progress-bar"><div class="progress-fill" style="width: 75%;"></div></div>
                 </div>
             </div>
         </section>
 
         <section id="labs">
-            <h2 class="section-title">0x02_Lab_Reports</h2>
+            <h2 class="section-title">0x02_Latest_Reports</h2>
             <div class="writeup-list">
                 
                 <div class="writeup-row">
@@ -268,10 +297,10 @@
                     </div>
                     <div class="w-info">
                         <h3>Machine: "Forest"</h3>
-                        <p>Active Directory compromise via AS-REP Roasting and Bloodhound analysis.</p>
+                        <p>Complete AD compromise leveraging AS-REP Roasting and Bloodhound pathfinding.</p>
                     </div>
                     <div class="w-action">
-                        <a href="#" class="action-link">VIEW_LOG.RAW</a>
+                        <a href="labs.html" class="action-link">VIEW_FULL_LOG</a>
                     </div>
                 </div>
 
@@ -281,20 +310,24 @@
                         <span class="w-tag">THM / AD</span>
                     </div>
                     <div class="w-info">
-                        <h3>Vulnerability Assessment</h3>
-                        <p>Scanning internal subnets with Nmap and Nessus for critical misconfigurations.</p>
+                        <h3>Attacking Kerberos</h3>
+                        <p>Detailed analysis of ticket-granting service vulnerabilities and mitigation strategies.</p>
                     </div>
                     <div class="w-action">
-                        <a href="#" class="action-link">VIEW_LOG.RAW</a>
+                        <a href="labs.html" class="action-link">VIEW_FULL_LOG</a>
                     </div>
                 </div>
 
             </div>
+
+            <div style="text-align: center; margin-top: 3rem;">
+                <a href="labs.html" class="action-link" style="padding: 15px 30px; font-size: 1rem;">ACCESS_COMPLETE_LAB_ARCHIVE</a>
+            </div>
         </section>
     </main>
 
-    <footer>
-        <p>TERMINAL v1.0.4 // (C) 2026 // PENTEST_IN_PROGRESS</p>
+    <footer id="contact">
+        <p>RECORDS_v1.0.6 // (C) 2026 // PENTEST_IN_PROGRESS</p>
     </footer>
 
 </body>
