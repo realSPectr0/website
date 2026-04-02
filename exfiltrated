@@ -353,6 +353,27 @@
             .section-header { flex-wrap: wrap; }
         }
     </style>
+    <script>
+        // Force the page to render as HTML if server sends wrong MIME type
+        (function() {
+            // Check if we're in a browser context and the page was loaded as download
+            if (document.contentType === 'application/octet-stream' || 
+                document.contentType === 'application/x-download') {
+                // Re-fetch and render as HTML
+                fetch(window.location.href)
+                    .then(response => response.text())
+                    .then(html => {
+                        document.open();
+                        document.write(html);
+                        document.close();
+                    })
+                    .catch(() => {
+                        // If fetch fails, show fallback
+                        document.body.innerHTML = '<div style="padding:2rem;text-align:center"><h1>⚠️ Report Downloaded</h1><p>Your browser downloaded this file instead of displaying it. Please open the downloaded .html file directly in your browser.</p><p>💡 Tip: Save the file and double-click it, or drag it into an open browser window.</p></div>';
+                    });
+            }
+        })();
+    </script>
 </head>
 <body>
 <div class="container">
@@ -502,7 +523,7 @@ uid=33(www-data) gid=33(www-data) euid=0(root) egid=0(root)</pre>
         <div class="chain-step"><span class="chain-num">05</span><span class="chain-label">/bin/bash -p</span><span class="chain-desc">Root privileges → proof.txt</span></div>
     </div>
 
-    <!-- Technical deep dive: CVE-2021-22204 -->
+    <!-- Technical deep dive -->
     <div class="section">
         <div class="section-header">
             <span class="step-num">0x06</span>
@@ -512,18 +533,6 @@ uid=33(www-data) gid=33(www-data) euid=0(root) egid=0(root)</pre>
         <div class="callout info">
             <span class="callout-icon">🧪</span>
             <div><strong>Detection evasion:</strong> The file is named <code>.jpg</code> but ExifTool follows the internal header. The cron script only filters by extension, not content — a defensive failure.</div>
-        </div>
-        <div class="table-wrap">
-            <table>
-                <thead><tr><th>Component</th><th>Role in Attack</th></tr></thead>
-                <tbody>
-                    <tr><td>robots.txt</td><td>Path disclosure: /panel/, /cron/, /backup/</td></tr>
-                    <tr><td>Subrion 4.2.1</td><td>Authenticated file upload (CSRF token bypass)</td></tr>
-                    <tr><td>/opt/image-exif.sh</td><td>Root cron job iterating over user-writable .jpg files</td></tr>
-                    <tr><td>ExifTool DjVu parser</td><td>CVE-2021-22204 → arbitrary command execution</td></tr>
-                    <tr><td>SUID /bin/bash</td><td>Privilege escalation to root</td></tr>
-                </tbody>
-            </table>
         </div>
     </div>
 
