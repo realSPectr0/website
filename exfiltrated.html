@@ -14,7 +14,7 @@
             --text-dim: #8b949e; 
             --glass: rgba(255, 255, 255, 0.03); 
             --glass-border: rgba(255, 255, 255, 0.1);
-            --accent-orange: #ff6b35;
+            --accent-green: #00ff9d;
             --glow: rgba(0,255,157,0.15);
             --border-subtle: rgba(255,255,255,0.08);
         }
@@ -77,13 +77,13 @@
         .archive-status {
             font-family: 'Fira Code', monospace;
             font-size: 0.85rem;
-            color: var(--accent-orange);
+            color: var(--accent);
             margin-bottom: 2rem;
             display: flex;
             align-items: center;
             gap: 0.75rem;
             flex-wrap: wrap;
-            border-left: 2px solid var(--accent-orange);
+            border-left: 2px solid var(--accent);
             padding-left: 1rem;
         }
 
@@ -91,10 +91,10 @@
             display: inline-block;
             width: 8px;
             height: 8px;
-            background: var(--accent-orange);
+            background: var(--accent);
             border-radius: 50%;
             margin-right: 6px;
-            box-shadow: 0 0 10px var(--accent-orange);
+            box-shadow: 0 0 10px var(--accent);
             animation: pulse-animation 2s infinite;
         }
 
@@ -117,12 +117,11 @@
         }
         .meta-row span { display: flex; align-items: center; gap: 0.5rem; }
         .meta-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); display: inline-block; }
-        .meta-dot.orange { background: var(--accent-orange); }
 
         .toc {
             background: var(--glass);
             border: 1px solid var(--glass-border);
-            border-left: 3px solid var(--accent-orange);
+            border-left: 3px solid var(--accent);
             border-radius: 12px;
             padding: 1.5rem 1.8rem;
             margin-bottom: 3rem;
@@ -131,7 +130,7 @@
         .toc-title {
             font-family: 'Fira Code', monospace;
             font-size: 0.75rem;
-            color: var(--accent-orange);
+            color: var(--accent);
             letter-spacing: 0.12em;
             text-transform: uppercase;
             margin-bottom: 1rem;
@@ -150,7 +149,7 @@
             gap: 0.6rem;
         }
         .toc-num {
-            color: var(--accent-orange);
+            color: var(--accent);
             min-width: 2rem;
             font-weight: 500;
         }
@@ -268,7 +267,7 @@
             border: 1px solid var(--glass-border);
         }
         .callout.info { border-left: 3px solid var(--accent-blue); }
-        .callout.warn { border-left: 3px solid var(--accent-orange); }
+        .callout.warn { border-left: 3px solid var(--accent); }
         .callout.success { border-left: 3px solid var(--accent); }
         .callout-icon { font-size: 1.2rem; flex-shrink: 0; }
 
@@ -312,10 +311,10 @@
             left: 2rem;
             bottom: -12px;
             z-index: 2;
-            color: var(--accent-orange);
+            color: var(--accent);
             font-size: 1rem;
         }
-        .chain-num { color: var(--accent-orange); min-width: 1.8rem; }
+        .chain-num { color: var(--accent); min-width: 1.8rem; }
         .chain-label { color: white; font-weight: 500; }
         .chain-desc { color: var(--text-dim); margin-left: auto; font-size: 0.7rem; }
 
@@ -387,7 +386,7 @@
         <span class="pulse"></span> // CVE_CHAIN // LINUX_PRIV_ESC
     </div>
     <div class="meta-row">
-        <span><span class="meta-dot orange"></span>TARGET: 192.168.144.163</span>
+        <span><span class="meta-dot"></span>TARGET: 192.168.144.163</span>
         <span><span class="meta-dot"></span>OS: Ubuntu (Linux)</span>
         <span><span class="meta-dot"></span>CVEs: CVE-2018-19422 · CVE-2021-22204</span>
         <span><span class="meta-dot"></span>STATUS: ROOT_SHELL</span>
