@@ -1,4 +1,4 @@
-import { Disc3, Flag, FlaskConical, Gamepad2, Mail, User, Zap } from 'lucide-react';
+import { Disc3, Flag, FlaskConical, FolderOpen, Gamepad2, Mail, User, Zap } from 'lucide-react';
 
 import {
   archLinuxIcon,
@@ -52,18 +52,24 @@ export const pagesLists: pagesListsType[] = [
   },
   {
     id: 3,
+    title: 'Projects',
+    href: '/projects',
+    icon: <FolderOpen />,
+  },
+  {
+    id: 5,
     title: 'CTF Placements',
     href: '/ctf-placements',
     icon: <Flag />,
   },
   {
-    id: 4,
+    id: 6,
     title: 'Lab Writeups',
     href: '/lab-writeups',
     icon: <FlaskConical />,
   },
   {
-    id: 5,
+    id: 7,
     title: 'Contact',
     href: '/contact',
     icon: <Mail />,

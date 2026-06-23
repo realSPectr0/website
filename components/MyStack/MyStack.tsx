@@ -13,7 +13,7 @@ export default function MyStack() {
         <SectionHeading
           darkImage={stackIcon}
           lightImage={stackIconLight}
-          title='My Stacks'
+          title='My Stack'
           description='A customizable toolkit for security research, Linux workflows, and notes.'
         />
       </div>
