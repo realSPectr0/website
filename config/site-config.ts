@@ -1,5 +1,8 @@
 import { env } from '../env.mjs';
 
+const siteUrl = env.SITE_URL || 'https://temp3st.vercel.app';
+const ogImageUrl = `${siteUrl}/opengraph-image.jpg`;
+
 export const siteConfig = {
   title: 'Jonathan Lin • Cyber Security Portfolio',
   name: 'Jonathan Lin',
@@ -30,8 +33,8 @@ export const siteConfig = {
     apple: '/favicon/apple-touch-icon.png',
   },
 
-  url: env.SITE_URL || 'https://dark-portfolio-site.vercel.app/',
-  ogImage: `${env.SITE_URL || 'https://dark-portfolio-site.vercel.app/'}/og-image.png`,
+  url: siteUrl,
+  ogImage: ogImageUrl,
   twitterHandle: '@jonathanlin',
   locale: 'en_US',
   author: {
@@ -49,7 +52,7 @@ export const siteConfig = {
       'Explore the projects, achievements, and security research interests of Jonathan Lin.',
     openGraph: {
       type: 'website',
-      url: env.SITE_URL,
+      url: siteUrl,
       title: 'Jonathan Lin • Cyber Security Portfolio',
       description:
         'Explore the projects, achievements, and security research interests of Jonathan Lin.',
@@ -57,7 +60,7 @@ export const siteConfig = {
 
       images: [
         {
-          url: `${env.SITE_URL}/og-image.png`,
+          url: ogImageUrl,
           width: 1200,
           height: 630,
           alt: 'Jonathan Lin Portfolio Preview',
@@ -72,7 +75,7 @@ export const siteConfig = {
       title: 'Jonathan Lin • Cyber Security Portfolio',
       description:
         'Cyber security portfolio covering security research, CTFs, and Linux workflow projects.',
-      images: [`${env.SITE_URL}/og-image.png`],
+      images: [ogImageUrl],
     },
   },
 };
