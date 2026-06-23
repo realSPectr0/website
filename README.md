@@ -54,3 +54,7 @@ This website is my personal cybersecurity portfolio. It highlights my work in:
 ├── styles/               # Global styles
 ├── types/                # TypeScript types
 └── schemas/              # Content/data schemas
+```
+
+## Inpiration
+ - [psparwez](https://github.com/psparwez)
