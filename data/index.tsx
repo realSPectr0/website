@@ -9,7 +9,6 @@ import {
   User,
   Zap,
 } from 'lucide-react';
-import Image from 'next/image';
 
 import {
   archLinuxIcon,
@@ -29,7 +28,6 @@ import {
   pythonIcon,
   securityLabIcon,
   securityPlusIcon,
-  spotify,
   tutoringIcon,
   unityIcon,
   webmasterIcon,
@@ -111,13 +109,40 @@ export const socialLists: socialListsTypes[] = [
     id: 4,
     title: 'Spotify',
     icon: (
-      <Image
-        src={spotify}
-        alt=''
+      <svg
+        xmlns='http://www.w3.org/2000/svg'
         width={22}
         height={22}
-        className='h-[22px] w-[22px]'
-      />
+        viewBox='0 0 24 24'
+        fill='none'
+        aria-hidden='true'
+      >
+        <circle
+          cx='12'
+          cy='12'
+          r='9'
+          stroke='currentColor'
+          strokeWidth='2'
+        />
+        <path
+          d='M7.8 9.7c2.9-.8 6.2-.5 8.5 1'
+          stroke='currentColor'
+          strokeWidth='1.8'
+          strokeLinecap='round'
+        />
+        <path
+          d='M8.4 12.4c2.2-.6 4.8-.4 6.6.8'
+          stroke='currentColor'
+          strokeWidth='1.6'
+          strokeLinecap='round'
+        />
+        <path
+          d='M9 15c1.6-.4 3.4-.3 4.8.6'
+          stroke='currentColor'
+          strokeWidth='1.4'
+          strokeLinecap='round'
+        />
+      </svg>
     ),
     link: 'https://open.spotify.com/user/7d52phjgrytj4wzj463622xn1?si=f2eb18698b0b4575',
   },
