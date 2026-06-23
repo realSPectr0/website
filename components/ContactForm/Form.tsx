@@ -4,7 +4,6 @@ import type { FormEvent } from 'react';
 import { useState } from 'react';
 
 import { formVariants } from '@/animation/varients';
-
 import Loader from '../ui/Loader';
 import SuccessForm from '../ui/SuccessForm';
 export default function Form() {
@@ -24,21 +23,39 @@ export default function Form() {
     setIsSubmitting(true);
     setLoader(true);
 
-    // TODO: API CALL
+    void (async () => {
+      try {
+        const response = await fetch('/api/send', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            fullName: data.name,
+            email: data.email,
+            message: data.message,
+          }),
+        });
 
-    setTimeout(() => {
-      setData({
-        name: '',
-        email: '',
-        message: '',
-      });
-      setLoader(false);
-      setErrorOnSubmit(false);
+        if (!response.ok) {
+          throw new Error('Failed to send message');
+        }
 
-      setTimeout(() => {
-        setIsSubmitting(false);
-      }, 7000);
-    }, 4000);
+        setData({
+          name: '',
+          email: '',
+          message: '',
+        });
+        setErrorOnSubmit(false);
+      } catch {
+        setErrorOnSubmit(true);
+      } finally {
+        setLoader(false);
+        setTimeout(() => {
+          setIsSubmitting(false);
+        }, 2500);
+      }
+    })();
   };
 
   return (

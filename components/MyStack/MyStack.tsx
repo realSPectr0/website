@@ -14,7 +14,7 @@ export default function MyStack() {
           darkImage={stackIcon}
           lightImage={stackIconLight}
           title='My Stacks'
-          description='Commitment to staying updated with the latest design trends and techniques.'
+          description='A customizable toolkit for security research, Linux workflows, and notes.'
         />
       </div>
 

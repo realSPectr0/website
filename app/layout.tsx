@@ -13,7 +13,6 @@ import { siteConfig } from '@/config/site-config';
 import developerConfig from '@/data/developer.config.json';
 import { fonts } from '@/lib/fonts';
 import { cn } from '@/lib/utils';
-import NextTopLoaderProvider from '@/providers/nexttop-loader-provider';
 import { ThemeProvider } from '@/providers/theme-provider';
 
 function getWebSiteJsonLd(): WithContext<WebSite> {
@@ -60,7 +59,7 @@ export const metadata: Metadata = {
         url: '/opengraph-image.jpg',
         width: 1200,
         height: 630,
-        alt: 'Preview of PS Parwez Portfolio',
+        alt: 'Preview of Jonathan Lin Portfolio',
       },
     ],
   },
@@ -77,7 +76,7 @@ export const metadata: Metadata = {
   },
   authors: [
     {
-      name: siteConfig.author?.name ?? 'PS Parwez',
+      name: siteConfig.author?.name ?? 'Jonathan Lin',
       url: siteConfig.author?.url ?? siteConfig.url,
     },
   ],
@@ -119,7 +118,6 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <NextTopLoaderProvider />
           <PageLayout>
             <Navbar />
             {children}

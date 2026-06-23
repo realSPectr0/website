@@ -25,7 +25,7 @@ export interface socialBrandsTypes {
 export interface counterListsType {
   id: number;
   title: string;
-  value: number;
+  value: string;
 }
 
 export interface myExperienceTypes {
@@ -35,6 +35,12 @@ export interface myExperienceTypes {
   company: string;
   label: string;
   description: string;
+  location?: string;
+  bullets?: string[];
+  links?: {
+    label: string;
+    href: string;
+  }[];
   link: string;
   logo: string;
   logoLight: string;

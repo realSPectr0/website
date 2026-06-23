@@ -2,7 +2,6 @@
 import { motion } from 'motion/react';
 import React from 'react';
 
-import Brandcontainer from '../Brandcontainer/Brandcontainer';
 import CounterContainer from '../CounterContainer/CounterContainer';
 
 export default function HeroContainer() {
@@ -23,8 +22,6 @@ export default function HeroContainer() {
         }}
         viewport={{ once: true }}
       >
-        <Brandcontainer />
-        {/* bottom  */}
         <CounterContainer />
       </motion.div>
     </>

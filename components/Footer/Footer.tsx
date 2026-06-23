@@ -24,9 +24,9 @@ const CopyrightText = () => {
     <div className='relative flex h-auto flex-1 shrink-0 justify-start wrap-break-word whitespace-pre-wrap'>
       <small
         className='text-light-gray-2 text-base font-medium sm:text-lg'
-        aria-label={`Copyright ${new Date().getFullYear()} Parwez. All rights reserved.`}
+        aria-label={`Copyright ${new Date().getFullYear()} temp3st. All rights reserved.`}
       >
-        &copy; {new Date().getFullYear()} Parwez. All rights reserved.
+        &copy; {new Date().getFullYear()} temp3st. All rights reserved.
       </small>
     </div>
   );

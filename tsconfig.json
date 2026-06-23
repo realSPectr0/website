@@ -20,7 +20,8 @@
     ],
     "paths": {
       "@/*": ["./*"],
-      "@assets/*": ["./app/assets/*"]
+      "@assets/*": ["./app/assets/*"],
+      "motion/react": ["./lib/static-motion.tsx"]
     }
   },
   "include": [

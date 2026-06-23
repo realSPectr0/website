@@ -1,6 +1,17 @@
 'use client';
+import {
+  BookOpen,
+  Braces,
+  Code2,
+  GitBranch,
+  LayoutDashboard,
+  MessageCircle,
+  NotebookText,
+  PencilLine,
+  SquareTerminal,
+  Terminal,
+} from 'lucide-react';
 import { motion } from 'motion/react';
-import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 
@@ -8,6 +19,19 @@ import { rightArrow as rightArrowDark, rightArrowLight } from '@/app/assets/asse
 import { myStack } from '@/data';
 
 import DynamicIcon from '../dynamic-icon';
+
+const stackIcons: Record<string, React.ReactNode> = {
+  'Arch Linux': <Terminal size={26} />,
+  Hyprland: <LayoutDashboard size={26} />,
+  Git: <GitBranch size={26} />,
+  Obsidian: <NotebookText size={26} />,
+  Notion: <BookOpen size={26} />,
+  Bash: <SquareTerminal size={26} />,
+  PowerShell: <Code2 size={26} />,
+  Python: <Braces size={26} />,
+  Neovim: <PencilLine size={26} />,
+  Discord: <MessageCircle size={26} />,
+};
 
 export default function StackLists() {
   return (
@@ -33,17 +57,8 @@ export default function StackLists() {
               aria-label={`View more about ${stack.title}`}
               className='bg-very-dark-gray border-dark-gray-3 group hover:bg-almost-black relative flex h-min w-full cursor-pointer flex-nowrap items-center justify-start gap-2.5 overflow-visible rounded-xl border p-[14px_24px_14px_14px] transition-all duration-500'
             >
-              {/* logo  */}
-              <div className='bg-dark-gray-4 border-border-color relative flex h-min w-min flex-none flex-nowrap items-center justify-center gap-2.5 overflow-hidden rounded-[7px] border p-2'>
-                <div className='relative aspect-square h-auto w-[30px] flex-none overflow-hidden'>
-                  <figure className='relative inset-0 rounded-[inherit]'>
-                    <Image
-                      src={stack.logo}
-                      alt={stack.title}
-                      className='block h-full w-full rounded-[inherit] object-cover object-center'
-                    />
-                  </figure>
-                </div>
+              <div className='bg-dark-gray-4 border-border-color text-light-gray-3 flex h-12 w-12 flex-none items-center justify-center rounded-[7px] border'>
+                {stackIcons[stack.title] ?? <Terminal size={26} />}
               </div>
               {/* text  */}
               <div className='relative flex h-min flex-1 flex-col flex-nowrap items-start justify-start gap-0 overflow-visible p-0'>

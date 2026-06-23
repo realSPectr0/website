@@ -5,7 +5,6 @@ import MyExperience from '@/components/MyExperience/MyExperience';
 import MyServices from '@/components/MyServices/MyServices';
 import MyStack from '@/components/MyStack/MyStack';
 import ShowCase from '@/components/ShowCase';
-import Testimonials from '@/components/Testimonials';
 
 export default function Home() {
   return (
@@ -18,7 +17,6 @@ export default function Home() {
         showData={2}
         isMore
       />
-      <Testimonials />
     </div>
   );
 }

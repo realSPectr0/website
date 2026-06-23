@@ -13,8 +13,8 @@ export default function MyServices() {
         <SectionHeading
           darkImage={zapIcon}
           lightImage={zapIconLight}
-          title='My Services'
-          description='Formulating comprehensive strategies to meet your design goals and exceed expectations.'
+          title='Acheivements/Certifications'
+          description='A short list of security milestones and credentials to customize.'
         />
       </div>
       <ServiceItemLists />

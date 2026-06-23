@@ -24,6 +24,10 @@ export default function ShowCase({
   isMore: boolean;
   showData: number;
 }) {
+  if (myShowCases.length === 0) {
+    return null;
+  }
+
   return (
     <section
       aria-labelledby='showcase-heading'
