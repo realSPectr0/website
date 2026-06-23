@@ -183,7 +183,7 @@ export const myExperience: myExperienceTypes[] = [
     label: 'United States',
     description: 'Specialize in web exploitation for the team.',
     bullets: [
-      'Ranked peaked Top 20 in the US on CTFtime (Current National Ranking: 20).',
+      'Ranked peaked Top 12 in the US on CTFtime (Current National Rank 13).',
       'Specialize in Web exploitation for the team.',
       'Team placed 14th in PicoCTF 2026 out of 8747 teams that participated.',
       'Placed 8th in MetaCTF (solo) for the team.',
@@ -191,11 +191,11 @@ export const myExperience: myExperienceTypes[] = [
     links: [
       {
         label: 'CTF team',
-        href: 'https://ctftime.org/team/000000',
+        href: 'https://ctftime.org/team/419270',
       },
       {
         label: 'Team home-page',
-        href: 'https://example.com',
+        href: 'https://idktheflag.sh/',
       },
     ],
     link: 'https://example.com',
@@ -232,7 +232,7 @@ export const myExperience: myExperienceTypes[] = [
     links: [
       {
         label: 'ROLCC Tutoring',
-        href: 'https://example.com',
+        href: 'https://rolcc.net/rolcc2/community-service-center/',
       },
     ],
     link: 'https://example.com',
@@ -254,7 +254,7 @@ export const myExperience: myExperienceTypes[] = [
     links: [
       {
         label: 'Troop Website',
-        href: 'https://example.com',
+        href: 'https://sites.google.com/view/troop-888/home',
       },
     ],
     link: 'https://example.com',
@@ -276,7 +276,7 @@ export const myExperience: myExperienceTypes[] = [
     links: [
       {
         label: 'Troop Website',
-        href: 'https://example.com',
+        href: 'https://sites.google.com/view/troop-888/home',
       },
     ],
     link: 'https://example.com',
