@@ -56,7 +56,7 @@ export const metadata: Metadata = {
     siteName: siteConfig.title,
     images: [
       {
-        url: '/opengraph-image.jpg',
+        url: '/jonathan-lin-preview.jpg',
         width: 1200,
         height: 630,
         alt: 'Preview of Jonathan Lin Portfolio',
@@ -67,7 +67,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: siteConfig.title,
     description: siteConfig.description,
-    images: ['/opengraph-image.jpg'],
+    images: ['/jonathan-lin-preview.jpg'],
     creator: siteConfig.twitterHandle,
   },
 

@@ -1,7 +1,7 @@
 import { env } from '../env.mjs';
 
 const siteUrl = env.SITE_URL || 'https://temp3st.vercel.app';
-const ogImageUrl = `${siteUrl}/opengraph-image.jpg`;
+const ogImageUrl = `${siteUrl}/jonathan-lin-preview.jpg`;
 
 export const siteConfig = {
   title: 'Jonathan Lin • Cyber Security Portfolio',
