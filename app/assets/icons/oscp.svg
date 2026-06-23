@@ -1,18 +1,20 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
-  <rect width="64" height="64" rx="14" fill="#0B1020"/>
-  <circle cx="24" cy="24" r="10" stroke="#00B8D9" stroke-width="4"/>
-  <path d="M34 14L50 50" stroke="#7C3AED" stroke-width="6" stroke-linecap="round"/>
-  <path d="M16 44H48" stroke="#00B8D9" stroke-width="4" stroke-linecap="round"/>
-  <path d="M24 18c-3.3 0-6 2.7-6 6s2.7 6 6 6" stroke="#E5E7EB" stroke-width="2.5" stroke-linecap="round"/>
-  <text
-    x="32"
-    y="58"
-    text-anchor="middle"
-    font-family="Arial, Helvetica, sans-serif"
-    font-size="9"
-    font-weight="700"
-    fill="#E5E7EB"
-  >
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="oscp-title oscp-desc">
+  <title id="oscp-title">OSCP certification icon</title>
+  <desc id="oscp-desc">Neutral certification badge for OffSec OSCP preparation.</desc>
+  <defs>
+    <linearGradient id="oscp-bg" x1="10" y1="8" x2="56" y2="58" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#111827"/>
+      <stop offset="1" stop-color="#020617"/>
+    </linearGradient>
+  </defs>
+  <rect x="4" y="4" width="56" height="56" rx="14" fill="url(#oscp-bg)"/>
+  <path d="M18 12h28l6 8v24l-20 10-20-10V20l6-8Z" fill="#0B1120" stroke="#EF4444" stroke-width="2.4"/>
+  <path d="M22 19h20l4 5v15l-14 7-14-7V24l4-5Z" fill="#111827" stroke="#F9FAFB" stroke-opacity=".85" stroke-width="1.4"/>
+  <path d="M25 27h14M25 33h10M25 39h14" stroke="#EF4444" stroke-width="2.4" stroke-linecap="round"/>
+  <text x="32" y="18" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="6" font-weight="700" fill="#F9FAFB" letter-spacing=".6">
     OFFSEC
+  </text>
+  <text x="32" y="57" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="9" font-weight="800" fill="#F9FAFB">
+    OSCP
   </text>
 </svg>
