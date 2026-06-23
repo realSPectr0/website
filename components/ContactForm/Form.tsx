@@ -4,8 +4,10 @@ import type { FormEvent } from 'react';
 import { useState } from 'react';
 
 import { formVariants } from '@/animation/varients';
+
 import Loader from '../ui/Loader';
 import SuccessForm from '../ui/SuccessForm';
+
 export default function Form() {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [loader, setLoader] = useState<boolean>(false);

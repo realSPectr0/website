@@ -25,8 +25,8 @@ export const siteConfig = {
   ],
 
   icons: {
-    icon: '/favicon/favicon.ico',
-    shortcut: '/favicon/favicon-16x16.png',
+    icon: '/favicon/darkmclaren.jpg',
+    shortcut: '/favicon/darkmclaren.jpg',
     apple: '/favicon/apple-touch-icon.png',
   },
 

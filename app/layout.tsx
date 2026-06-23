@@ -98,9 +98,9 @@ export default function RootLayout({
       <head>
         <link
           rel='icon'
-          href='/favicon.ico'
+          href='/favicon/darkmclaren.jpg'
           sizes='any'
-          type='image/x-icon'
+          type='image/jpeg'
         />
 
         <Script
