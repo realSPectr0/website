@@ -1,4 +1,14 @@
-import { Disc3, Flag, FlaskConical, FolderOpen, Gamepad2, Mail, User, Zap } from 'lucide-react';
+import {
+  Disc3,
+  Flag,
+  FlaskConical,
+  FolderOpen,
+  Gamepad2,
+  Github,
+  Mail,
+  User,
+  Zap,
+} from 'lucide-react';
 
 import {
   archLinuxIcon,
@@ -88,6 +98,12 @@ export const socialLists: socialListsTypes[] = [
     title: 'guns.lol',
     icon: <Gamepad2 size={22} />,
     link: 'https://guns.lol/1_void',
+  },
+  {
+    id: 3,
+    title: 'GitHub',
+    icon: <Github size={22} />,
+    link: 'https://github.com/realSPectr0',
   },
 ];
 
