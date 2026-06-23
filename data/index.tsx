@@ -46,7 +46,7 @@ export const pagesLists: pagesListsType[] = [
   },
   {
     id: 2,
-    title: 'Services',
+    title: 'Achievements & Certifications',
     href: '/services',
     icon: <Zap />,
   },
