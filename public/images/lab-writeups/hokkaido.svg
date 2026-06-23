@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" role="img" aria-label="Hokkaido Active Directory chain writeup">
+  <rect width="1200" height="600" fill="#0f1218"/>
+  <path d="M160 195h880" stroke="#334155" stroke-width="10" stroke-linecap="round"/>
+  <g fill="#111827" stroke-width="5">
+    <circle cx="180" cy="195" r="60" stroke="#38bdf8"/>
+    <circle cx="390" cy="195" r="60" stroke="#22c55e"/>
+    <circle cx="600" cy="195" r="60" stroke="#facc15"/>
+    <circle cx="810" cy="195" r="60" stroke="#a78bfa"/>
+    <circle cx="1020" cy="195" r="60" stroke="#ef4444"/>
+  </g>
+  <text x="600" y="64" text-anchor="middle" font-family="Inter,Arial" font-size="48" font-weight="800" fill="#f8fafc">Hokkaido</text>
+  <text x="180" y="204" text-anchor="middle" font-family="Inter,Arial" font-size="18" font-weight="800" fill="#e2e8f0">SMB</text>
+  <text x="390" y="204" text-anchor="middle" font-family="Inter,Arial" font-size="18" font-weight="800" fill="#e2e8f0">MSSQL</text>
+  <text x="600" y="204" text-anchor="middle" font-family="Inter,Arial" font-size="18" font-weight="800" fill="#e2e8f0">ACL</text>
+  <text x="810" y="204" text-anchor="middle" font-family="Inter,Arial" font-size="18" font-weight="800" fill="#e2e8f0">Backup</text>
+  <text x="1020" y="204" text-anchor="middle" font-family="Inter,Arial" font-size="18" font-weight="800" fill="#e2e8f0">Admin</text>
+  <text x="600" y="430" text-anchor="middle" font-family="Inter,Arial" font-size="34" font-weight="700" fill="#94a3b8">Credential chaining across shares, databases, BloodHound edges, and SAM dumps</text>
+</svg>
