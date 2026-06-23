@@ -3,12 +3,21 @@ import { Resend } from 'resend';
 
 import { EmailTemplate } from '@/components/ui/email-template';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-const fromEmail = process.env.FROM_EMAIL;
 const toEmail = 'linjonathan1222@gmail.com';
 
 export async function POST(request: Request) {
   try {
+    const apiKey = process.env.RESEND_API_KEY;
+    const fromEmail = process.env.FROM_EMAIL;
+
+    if (!apiKey || !fromEmail) {
+      return NextResponse.json(
+        { error: 'Email service is not configured' },
+        { status: 503 }
+      );
+    }
+
+    const resend = new Resend(apiKey);
     const body = await request.json();
 
     const { fullName, email, message } = body;
