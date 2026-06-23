@@ -19,7 +19,7 @@ const projects = [
     Icon: Github,
   },
   {
-    title: 'Linux Environment Configuration Optimization',
+    title: 'Arch Linux Hyprland Configuration',
     description:
       'Personal Arch Linux dotfiles and workflow configuration for a faster, cleaner desktop and terminal environment.',
     href: 'https://github.com/realSPectr0/arch-dots',
