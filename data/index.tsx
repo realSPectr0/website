@@ -9,6 +9,7 @@ import {
   User,
   Zap,
 } from 'lucide-react';
+import Image from 'next/image';
 
 import {
   archLinuxIcon,
@@ -28,6 +29,7 @@ import {
   pythonIcon,
   securityLabIcon,
   securityPlusIcon,
+  spotify,
   tutoringIcon,
   unityIcon,
   webmasterIcon,
@@ -104,6 +106,20 @@ export const socialLists: socialListsTypes[] = [
     title: 'GitHub',
     icon: <Github size={22} />,
     link: 'https://github.com/realSPectr0',
+  },
+  {
+    id: 4,
+    title: 'Spotify',
+    icon: (
+      <Image
+        src={spotify}
+        alt=''
+        width={22}
+        height={22}
+        className='h-[22px] w-[22px]'
+      />
+    ),
+    link: 'https://open.spotify.com/user/7d52phjgrytj4wzj463622xn1?si=f2eb18698b0b4575',
   },
 ];
 
