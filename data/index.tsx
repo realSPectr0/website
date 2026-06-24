@@ -28,6 +28,8 @@ import {
   pythonIcon,
   securityLabIcon,
   securityPlusIcon,
+  stackIcon,
+  stackIconLight,
   tutoringIcon,
   unityIcon,
   webmasterIcon,
@@ -204,6 +206,28 @@ export const myExperience: myExperienceTypes[] = [
   },
   {
     id: 2,
+    year: 'Sept. 2025 - April 2026',
+    title: 'Main Driver & Robot Design Contributor',
+    company: 'LOA Robotics Team',
+    label: 'Robotics Competition',
+    description: 'Primary driver and robot design contributor for competitive robotics.',
+    bullets: [
+      "Selected as the team's primary driver, controlling the robot during competitive matches and executing match strategy under pressure.",
+      'Collaborated on CAD, mechanical design ideas, and iterative improvements to robot performance.',
+      'Contributed to a 1st-place finish at the Pioneers in Engineering Robotics Competition.',
+    ],
+    links: [
+      {
+        label: 'Competition',
+        href: 'https://pioneers.berkeley.edu/Competition/',
+      },
+    ],
+    link: 'https://pioneers.berkeley.edu/Competition/',
+    logo: awardIcon,
+    logoLight: awardIcon,
+  },
+  {
+    id: 3,
     year: 'Sept. 2023 - Present',
     title: 'Offensive Security Lab Research | Independent',
     company: 'Cybersecurity Research and Training',
@@ -218,7 +242,7 @@ export const myExperience: myExperienceTypes[] = [
     logoLight: securityLabIcon,
   },
   {
-    id: 3,
+    id: 4,
     year: 'Sept. 2024 - June 2025',
     title: 'ROLCC Tutoring',
     company: 'Tutored kids from low-income families',
@@ -240,7 +264,7 @@ export const myExperience: myExperienceTypes[] = [
     logoLight: tutoringIcon,
   },
   {
-    id: 4,
+    id: 5,
     year: 'Jan. 2023 - June 2023',
     title: 'Webmaster',
     company: 'Managed the Troop website',
@@ -262,7 +286,7 @@ export const myExperience: myExperienceTypes[] = [
     logoLight: webmasterIcon,
   },
   {
-    id: 5,
+    id: 6,
     year: 'Jan. 2023 - June 2023',
     title: 'Senior Patrol Leader',
     company: 'Attained the highest position in the Troop',
@@ -284,7 +308,7 @@ export const myExperience: myExperienceTypes[] = [
     logoLight: leaderIcon,
   },
   {
-    id: 6,
+    id: 7,
     year: 'Summer 2026',
     title: 'Assistant Group Leader',
     company: 'Shine Character Camp',
@@ -382,6 +406,14 @@ export const myStack: myStackTypes[] = [
     lightLogo: discord,
     link: 'https://discord.com',
   },
+  {
+    id: 11,
+    title: 'Onshape',
+    description: 'CAD Design',
+    logo: stackIcon,
+    lightLogo: stackIconLight,
+    link: 'https://www.onshape.com',
+  },
 ];
 
 export const myServices: myServicesTypes[] = [
@@ -416,6 +448,14 @@ export const myServices: myServicesTypes[] = [
     icon: awardIcon,
     lightIcon: awardIcon,
     link: '/services',
+  },
+  {
+    id: 5,
+    title: 'Robotics 1st Place',
+    description: '1st-place finish at the Pioneers in Engineering Robotics Competition.',
+    icon: awardIcon,
+    lightIcon: awardIcon,
+    link: 'https://pioneers.berkeley.edu/Competition/',
   },
 ];
 
@@ -462,6 +502,17 @@ export const myServicesPlans: myServicesPlansTypes[] = [
     service: 'Scout of the Year',
     price: 'Award',
     description: 'Scout of the Year award recognition.',
+    completedWorks: '',
+    experience: '',
+    totalHoursWorked: '',
+    icon: awardIcon,
+    lightIcon: awardIcon,
+  },
+  {
+    id: 5,
+    service: 'Robotics 1st Place',
+    price: 'Award',
+    description: '1st-place finish at the Pioneers in Engineering Robotics Competition.',
     completedWorks: '',
     experience: '',
     totalHoursWorked: '',

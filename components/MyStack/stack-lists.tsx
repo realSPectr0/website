@@ -1,6 +1,7 @@
 'use client';
 import {
   BookOpen,
+  Box,
   Braces,
   Code2,
   GitBranch,
@@ -31,6 +32,7 @@ const stackIcons: Record<string, React.ReactNode> = {
   Python: <Braces size={26} />,
   Neovim: <PencilLine size={26} />,
   Discord: <MessageCircle size={26} />,
+  Onshape: <Box size={26} />,
 };
 
 export default function StackLists() {
