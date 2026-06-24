@@ -399,14 +399,6 @@ export const myStack: myStackTypes[] = [
     link: 'https://neovim.io',
   },
   {
-    id: 10,
-    title: 'Discord',
-    description: 'Team Comms',
-    logo: discord,
-    lightLogo: discord,
-    link: 'https://discord.com',
-  },
-  {
     id: 11,
     title: 'Onshape',
     description: 'CAD Design',
