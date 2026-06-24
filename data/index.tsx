@@ -209,7 +209,7 @@ export const myExperience: myExperienceTypes[] = [
     year: 'Sept. 2025 - April 2026',
     title: 'Main Driver & Robot Design Contributor',
     company: 'LOA Robotics Team',
-    label: 'Robotics Competition',
+    label: 'UC-Berkeley',
     description: 'Primary driver and robot design contributor for competitive robotics.',
     bullets: [
       "Selected as the team's primary driver, controlling the robot during competitive matches and executing match strategy under pressure.",
@@ -521,48 +521,6 @@ export const myServicesPlans: myServicesPlansTypes[] = [
   },
 ];
 
-export const faqData: FAQ[] = [
-  {
-    question: 'Can you work with clients remotely?',
-    answer:
-      'Absolutely! I have experience working with clients from all around the world. Through effective communication channels such as email, video calls, and project management tools, I ensure seamless collaboration regardless of geographical location.',
-  },
-  {
-    question: 'Will my website be mobile-friendly?',
-    answer:
-      "Absolutely! Mobile responsiveness is a top priority in today's digital landscape. I design and develop websites that are fully responsive and adaptable to various devices and screen sizes. Your website will provide an optimal user experience whether accessed via desktops, smartphones, or tablets.",
-  },
-  {
-    question: 'How long does it typically take to complete a project?',
-    answer:
-      'The timeline for each project varies depending on its scope and complexity. Factors such as the number of pages, functionalities, and the client feedback process can impact the timeline. Upon discussing your project requirements, I will provide you with a realistic timeline and keep you updated throughout the process.',
-  },
-  {
-    question: 'Can you integrate third-party tools into my website?',
-    answer:
-      'Yes, I have experience integrating various third-party tools, plugins, and platforms into websites. Whether you need to integrate e-commerce functionalities, social media integration, email marketing services, or anything else, I can recommend and help ensure smooth integration.',
-  },
-  {
-    question: 'Do you offer website maintenance?',
-    answer:
-      'Yes, I offer website maintenance services to ensure your website remains up to date, secure, and optimized. From performance updates to adding new features and content, I can provide ongoing support to keep your website running smoothly.',
-  },
-  {
-    question: 'How do you handle website revisions?',
-    answer:
-      'I value your input and collaboration throughout the design process. Upon completing an initial design, I encourage you to provide feedback. I incorporate your suggestions and revisions to ensure the final product aligns with your vision.',
-  },
-  {
-    question: 'Can you optimize my website?',
-    answer:
-      'Certainly! I incorporate search engine optimization (SEO) best practices into my development process. This includes using relevant keywords, optimizing meta tags, creating search-engine-friendly URLs, and ensuring your website has a solid foundation for better search engine visibility.',
-  },
-  {
-    question: 'What are your payment terms?',
-    answer:
-      'Payment terms may vary depending on the project scope and duration. Generally, I request an initial deposit before commencing work.',
-  },
-];
 
 export const followerData: FollowerData[] = [
   {
