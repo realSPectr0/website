@@ -209,7 +209,7 @@ export const myExperience: myExperienceTypes[] = [
     year: 'Sept. 2025 - April 2026',
     title: 'Main Driver & Robot Design Contributor',
     company: 'LOA Robotics Team',
-    label: 'UC-Berkeley',
+    label: 'Live Oak Academy',
     description: 'Primary driver and robot design contributor for competitive robotics.',
     bullets: [
       "Selected as the team's primary driver, controlling the robot during competitive matches and executing match strategy under pressure.",
