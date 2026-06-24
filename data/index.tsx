@@ -512,7 +512,7 @@ export const myServicesPlans: myServicesPlansTypes[] = [
     id: 5,
     service: 'Robotics 1st Place',
     price: 'Award',
-    description: '1st-place finish at the Pioneers in Engineering Robotics Competition.',
+    description: '1st-place finish at the Pioneers in Engineering Robotics Competition at UC Berkeley.',
     completedWorks: '',
     experience: '',
     totalHoursWorked: '',
