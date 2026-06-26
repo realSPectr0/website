@@ -452,7 +452,7 @@ export const myServices: myServicesTypes[] = [
     id: 6,
     title: 'National Recognition Program',
     description:
-      'College Board School Recognition Award for outstanding academic achievement, awarded June 18, 2026.',
+      'College Board School Recognition Award for outstanding academic achievement.',
     icon: awardIcon,
     lightIcon: awardIcon,
     link: '/certificates/national-recognition-program.pdf',
@@ -524,7 +524,7 @@ export const myServicesPlans: myServicesPlansTypes[] = [
     service: 'National Recognition Program',
     price: 'Award',
     description:
-      'College Board School Recognition Award for outstanding academic achievement, awarded June 18, 2026.',
+      'College Board School Recognition Award for outstanding academic achievement.',
     completedWorks: '',
     experience: '',
     totalHoursWorked: '',
