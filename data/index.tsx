@@ -36,7 +36,6 @@ import {
 } from '@/app/assets/assets';
 import type {
   counterListsType,
-  FAQ,
   FollowerData,
   myExperienceTypes,
   myServicesPlansTypes,
@@ -449,6 +448,15 @@ export const myServices: myServicesTypes[] = [
     lightIcon: awardIcon,
     link: 'https://pioneers.berkeley.edu/Competition/',
   },
+  {
+    id: 6,
+    title: 'National Recognition Program',
+    description:
+      'College Board School Recognition Award for outstanding academic achievement, awarded June 18, 2026.',
+    icon: awardIcon,
+    lightIcon: awardIcon,
+    link: '/certificates/national-recognition-program.pdf',
+  },
 ];
 
 export const myShowCases: myShowCasesTypes[] = [];
@@ -505,6 +513,18 @@ export const myServicesPlans: myServicesPlansTypes[] = [
     service: 'Robotics 1st Place',
     price: 'Award',
     description: '1st-place finish at the PiE Robotics Competition at UC Berkeley.',
+    completedWorks: '',
+    experience: '',
+    totalHoursWorked: '',
+    icon: awardIcon,
+    lightIcon: awardIcon,
+  },
+  {
+    id: 6,
+    service: 'National Recognition Program',
+    price: 'Award',
+    description:
+      'College Board School Recognition Award for outstanding academic achievement, awarded June 18, 2026.',
     completedWorks: '',
     experience: '',
     totalHoursWorked: '',
