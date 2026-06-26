@@ -19,7 +19,7 @@ export default function ServicesSection() {
           description='A short list of security milestones and credentials to customize.'
         />
 
-        <div className='relative grid h-min w-full flex-0 grid-cols-1 justify-center gap-2.5 overflow-visible p-0 lg:grid-cols-[repeat(2,minmax(50px,1fr))] lg:grid-rows-[repeat(2,min-content)]'>
+        <div className='relative grid h-min w-full flex-0 auto-rows-fr grid-cols-1 justify-center gap-2.5 overflow-visible p-0 lg:grid-cols-[repeat(2,minmax(50px,1fr))]'>
           {myServicesPlans?.map((plan, index) => (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -29,15 +29,15 @@ export default function ServicesSection() {
                 once: true,
                 amount: 0.5,
               }}
-              className='relative h-auto w-full place-self-start'
+              className='relative h-full w-full place-self-stretch'
               key={plan.id}
             >
-              <div className='flexFlow bg-very-dark-gray border-dark-gray-3 relative flex h-min place-items-end items-end gap-5 rounded-xl border p-6'>
-                <div className='relative flex h-min w-full flex-col gap-4 p-0'>
+              <div className='flexFlow bg-very-dark-gray border-dark-gray-3 relative flex h-full min-h-[168px] items-start gap-5 rounded-xl border p-6'>
+                <div className='relative flex h-full w-full flex-col gap-4 p-0'>
                   {/* Top Section */}
                   <div className='flex h-min w-full items-center justify-between'>
                     {/* Left Section with Icon and Service */}
-                    <div className='flex flex-1 items-center gap-2'>
+                    <div className='flex min-w-0 flex-1 items-center gap-2'>
                       <div className='bg-dark-gray-3 border-border-color flex w-auto items-center justify-center rounded-lg border p-2'>
                         <div className='aspect-square h-6 w-6 overflow-hidden'>
                           <DynamicIcon
@@ -51,12 +51,14 @@ export default function ServicesSection() {
                         </div>
                       </div>
 
-                      <div className='flex flex-1 flex-col justify-start'>
-                        <p className='text-very-light-gray text-[20px] font-bold'>{plan.service}</p>
+                      <div className='flex min-w-0 flex-1 flex-col justify-start'>
+                        <p className='text-very-light-gray text-[20px] leading-[1.2em] font-bold'>
+                          {plan.service}
+                        </p>
                       </div>
                     </div>
 
-                    <div className='flex items-center gap-0'>
+                    <div className='flex shrink-0 items-center gap-0'>
                       <div className='flex flex-col justify-start'>
                         <p className='text-light-gray-3 text-[14px] font-semibold uppercase'>
                           {plan.price}

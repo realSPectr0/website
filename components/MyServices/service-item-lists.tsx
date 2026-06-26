@@ -15,7 +15,7 @@ export default function ServiceItemLists() {
       <motion.ul
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
-        className='relative grid h-min w-full flex-none auto-rows-min grid-cols-1 justify-center gap-2.5 overflow-visible p-0 lg:grid-cols-[repeat(2,minmax(50px,1fr))] lg:grid-rows-[repeat(2,min-content)]'
+        className='relative grid h-min w-full flex-none auto-rows-fr grid-cols-1 justify-center gap-2.5 overflow-visible p-0 lg:grid-cols-[repeat(2,minmax(50px,1fr))]'
       >
         {myServices?.map((service, index) => (
           <motion.li
@@ -26,12 +26,12 @@ export default function ServiceItemLists() {
             viewport={{
               once: true,
             }}
-            className='w-full'
+            className='h-full w-full'
           >
             <Link
               href={service.link}
               aria-label={`Read more about ${service.title}`}
-              className='bg-very-dark-gray border-dark-gray-3 group relative flex h-min w-full cursor-pointer flex-col flex-nowrap items-start justify-start gap-3.5 overflow-visible rounded-xl border p-5'
+              className='bg-very-dark-gray border-dark-gray-3 group relative flex h-full min-h-[174px] w-full cursor-pointer flex-col flex-nowrap items-start justify-start gap-3.5 overflow-visible rounded-xl border p-5'
             >
               {/* top  */}
               <div className='relative flex h-min w-full flex-none flex-nowrap items-center justify-start gap-2.5 overflow-visible p-0'>
