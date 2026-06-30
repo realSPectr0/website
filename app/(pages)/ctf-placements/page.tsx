@@ -1,9 +1,18 @@
-import {
-  Flag,
-  Trophy,
-} from 'lucide-react';
+import { Flag, Trophy } from 'lucide-react';
 
 const placements = [
+  {
+    place: '29th',
+    event: 'SekaiCTF',
+    description: 'Top 29 finish out of 926 teams.',
+    Icon: Flag,
+  },
+  {
+    place: '9th',
+    event: 'V1tCTF',
+    description: 'Top 9 finish out of 953 teams.',
+    Icon: Flag,
+  },
   {
     place: '20th',
     event: 'DEF CON 34 CTF Qualifier',
