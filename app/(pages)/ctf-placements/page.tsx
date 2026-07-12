@@ -16,7 +16,7 @@ const placements = [
   {
     place: '20th',
     event: 'DEF CON 34 CTF Qualifier',
-    description: 'Qualified through a competitive global CTF qualifier.',
+    description: "Competed against the world's best CTF teams in one of the biggest CTF events",
     Icon: Flag,
   },
   {
@@ -47,6 +47,24 @@ const placements = [
     place: '5th',
     event: 'TJCTF 2026',
     description: 'Top five placement at TJCTF 2026.',
+    Icon: Flag,
+  },
+  {
+    place: '8th',
+    event: 'BroncoCTF 2026',
+    description: 'Top 10 placement at BroncoCTF 2026.',
+    Icon: Flag,
+  },
+  {
+    place: '14th',
+    event: 'Junior.Crypt.2026 CTF',
+    description: 'Top 14 placement at Junior.Crypt.2026 CTF.',
+    Icon: Flag,
+  },
+  {
+    place: '10th',
+    event: 'LYKNCTF',
+    description: 'Top 10 placement at LYKNCTF.',
     Icon: Flag,
   },
 ];
