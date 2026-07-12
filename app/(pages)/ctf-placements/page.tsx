@@ -4,7 +4,8 @@ const placements = [
   {
     place: '29th',
     event: 'SekaiCTF',
-    description: 'Top 29 finish out of 926 teams.',
+    description:
+      "Placed 29th out of 926 teams in Project SEKAI's fifth annual CTF, featuring an $8,000 prize pool.",
     Icon: Flag,
   },
   {
