@@ -52,19 +52,19 @@ const placements = [
   {
     place: '8th',
     event: 'BroncoCTF 2026',
-    description: 'Top 10 placement at BroncoCTF 2026.',
+    description: 'Placed 8th in BroncoCTF, a dynamic-scoring CTF with no team size limit.',
     Icon: Flag,
   },
   {
     place: '14th',
     event: 'Junior.Crypt.2026 CTF',
-    description: 'Top 14 placement at Junior.Crypt.2026 CTF.',
+    description: 'Placed 14th in Junior.Crypt.2026 CTF on the GRODNO::CTF platform.',
     Icon: Flag,
   },
   {
     place: '10th',
     event: 'LYKNCTF',
-    description: 'Top 10 placement at LYKNCTF.',
+    description: 'Placed 10th in LYKNCTF, an online beginner-friendly jeopardy event with 657 teams.',
     Icon: Flag,
   },
 ];
