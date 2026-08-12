@@ -2,6 +2,18 @@ import { Flag, Trophy } from 'lucide-react';
 
 const placements = [
   {
+    place: '11th',
+    event: 'Kali-CTF 26',
+    description: 'Placed 11th in Kali-CTF 26 after a strong competitive run.',
+    Icon: Flag,
+  },
+  {
+    place: '9th',
+    event: 'LIT CTF 2026',
+    description: 'Earned a top 10 finish at LIT CTF 2026.',
+    Icon: Flag,
+  },
+  {
     place: '29th',
     event: 'SekaiCTF',
     description:
@@ -65,7 +77,8 @@ const placements = [
   {
     place: '10th',
     event: 'LYKNCTF',
-    description: 'Placed 10th in LYKNCTF, an online beginner-friendly jeopardy event with 657 teams.',
+    description:
+      'Placed 10th in LYKNCTF, an online beginner-friendly jeopardy event with 657 teams.',
     Icon: Flag,
   },
 ];
