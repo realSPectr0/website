@@ -8,6 +8,26 @@ type SortOption = 'date' | 'placement';
 
 const placements = [
   {
+    place: '4th',
+    rank: 4,
+    date: '2026-08-15',
+    dateLabel: 'Aug 15, 2026',
+    event: '0xV01D CTF 2026 V2',
+    description: 'Earned a 4th place finish in the second 0xV01D CTF event of 2026.',
+    href: 'https://ctftime.org/event/3387/',
+    Icon: Flag,
+  },
+  {
+    place: '3rd',
+    rank: 3,
+    date: '2026-08-08',
+    dateLabel: 'Aug 8, 2026',
+    event: 'scriptCTF 2026',
+    description: 'Secured 3rd place in ScriptSorcerers’ 48-hour jeopardy-style CTF.',
+    href: 'https://ctf.scriptsorcerers.xyz/',
+    Icon: Trophy,
+  },
+  {
     place: '11th',
     rank: 11,
     date: '2026-08-05',
