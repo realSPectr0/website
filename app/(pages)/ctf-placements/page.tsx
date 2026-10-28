@@ -6,7 +6,52 @@ import { useState } from 'react';
 
 type SortOption = 'date' | 'placement';
 
+const ordinal = (rank: number) => {
+  if (rank % 100 >= 11 && rank % 100 <= 13) return `${rank}th`;
+
+  return `${rank}${['th', 'st', 'nd', 'rd'][rank % 10] || 'th'}`;
+};
+
+const additionalPlacements = [
+  [3, '2026-10-10', 'Oct 10, 2026', 'GaianSpace CTF 2026', 3354],
+  [8, '2026-10-09', 'Oct 9, 2026', 'kBxAc CTF 2026', 3456],
+  [57, '2026-10-03', 'Oct 3, 2026', 'CubeCTF 2026', 3352],
+  [88, '2026-09-26', 'Sep 26, 2026', 'FAUST CTF 2026', 3312],
+  [18, '2026-09-19', 'Sep 19, 2026', 'WATCHLIST', 3326],
+  [60, '2026-09-18', 'Sep 18, 2026', 'CSAW CTF Qualification Round 2026', 3355],
+  [58, '2026-09-12', 'Sep 12, 2026', 'PwnSec CTF 2026', 3159],
+  [12, '2026-09-04', 'Sep 4, 2026', 'NNS CTF 2026', 3097],
+  [47, '2026-08-29', 'Aug 29, 2026', 'ASIS CTF Quals 2026', 3033],
+  [36, '2026-08-29', 'Aug 29, 2026', 'COMPFEST CTF 2026', 3290],
+  [39, '2026-08-22', 'Aug 22, 2026', 'TallDwarf Hosting: Hosting Takeover', 3394],
+  [17, '2026-08-21', 'Aug 21, 2026', 'z0d1ak CTF Qualifiers', 3370],
+  [40, '2026-08-21', 'Aug 21, 2026', 'BrunnerCTF 2026', 3065],
+  [3, '2026-08-08', 'Aug 8, 2026', 'scriptCTF 2026', 3052],
+  [58, '2026-08-08', 'Aug 8, 2026', 'UIUCTF 2026', 3148],
+  [15, '2026-07-31', 'Jul 31, 2026', 'BushBash CTF', 3372],
+  [54, '2026-07-25', 'Jul 25, 2026', 'D^3CTF 2026', 3201],
+  [76, '2026-07-18', 'Jul 18, 2026', 'ENOWARS 10', 3324],
+  [21, '2026-07-17', 'Jul 17, 2026', 'OmniCTF 2026 Quals', 3104],
+  [64, '2026-07-04', 'Jul 4, 2026', 'R3CTF 2026', 3149],
+  [15, '2026-07-04', 'Jul 4, 2026', 'No Hack No CTF 2026', 3180],
+  [69, '2026-05-30', 'May 30, 2026', 'Grey Cat The Flag 2026 Qualifiers', 3178],
+  [26, '2026-04-24', 'Apr 24, 2026', 'From Dusk Till Dawn Quals', 3111],
+  [23, '2026-04-04', 'Apr 4, 2026', 'SillyCTF 2', 3042],
+  [75, '2026-04-03', 'Apr 3, 2026', 'RITSEC CTF 2026', 3096],
+  [72, '2026-02-12', 'Feb 12, 2026', '0xFUN CTF 2026', 3081],
+] as const;
+
 const placements = [
+  ...additionalPlacements.map(([rank, date, dateLabel, event, eventId]) => ({
+    place: ordinal(rank),
+    rank,
+    date,
+    dateLabel,
+    event,
+    description: `${ordinal(rank)} place with idktheflag in ${event}.`,
+    href: `https://ctftime.org/event/${eventId}/`,
+    Icon: rank <= 3 ? Trophy : Flag,
+  })),
   {
     place: '4th',
     rank: 4,
