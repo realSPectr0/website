@@ -166,7 +166,7 @@ export const counterLists: counterListsType[] = [
   {
     id: 3,
     title: 'Place National CTF Team',
-    value: '12th',
+    value: '7th',
   },
   {
     id: 4,
